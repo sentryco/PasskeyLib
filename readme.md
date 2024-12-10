@@ -89,7 +89,8 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 - Apple on passkeys: https://developer.apple.com/documentation/authenticationservices/public-private-key-authentication
 - Very small sample project for passkeys https://github.com/hansemannn/iOS16-Passkeys-Sample/tree/main
 - Interesting webhauthn + passkeys. comprehensive + has nice gifs: https://github.com/lyokato/WebAuthnKit-iOS/tree/develop
+- Lots of passkey code for swift: https://github.com/tkhq/swift-sdk/blob/35a3f203d406eaaf64cc647f4c001deddb69c365/Sources/Shared/PasskeyManager.swift
 
 ### Todo: 
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.
-
+- Write unit tests based on the codebase. Use AI to suggest areas that are testable and write test code etc

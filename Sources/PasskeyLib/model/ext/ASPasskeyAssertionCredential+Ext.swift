@@ -8,12 +8,12 @@ extension ASPasskeyAssertionCredential {
     * - Parameter clientDataHash: - Fixme: ⚠️️ Add doc
     * - Returns: - Fixme: ⚠️️ Add doc
     */
-    func assertionCredential(clientDataHash: Data) -> ASPasskeyAssertionCredential? {
-        let authenticatorData = authenticatorData(relyingParty: relyingParty)
+   func assertionCredential(clientDataHash: Data, privateKeyStr: String) -> ASPasskeyAssertionCredential? {
+      let authenticatorData: Data = authenticatorDataObj(relyingParty: relyingParty)
         // Combine the authenticator data with the client data hash to form the challenge
         let challenge = authenticatorData + clientDataHash
         // Attempt to sign the challenge with the private key
-        guard let signature = signWithPrivateKey(challenge) else {
+      guard let signature = signWithPrivateKey(challenge, privateKeyStr: privateKeyStr) else {
             // Return nil if the signature could not be created
             return nil
         }

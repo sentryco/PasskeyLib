@@ -1,5 +1,8 @@
+import AuthenticationServices
+import CryptoKit
+import Foundation
+
 extension PKData {
-    import AuthenticationServices
     /**
      * Represents the registration data required for a passkey in the context of WebAuthn.
      *

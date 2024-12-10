@@ -44,7 +44,7 @@ extension CBOR {
         let dict: CBOR = [
             "fmt": "none", // Format of the attestation statement
             "attStmt": CBOR.map([:]), // Attestation statement (empty in this case)
-            "authData": CBOR.byteString(authData.bytes) // Authentication data
+            "authData": CBOR.byteString(Array(authData)) // Authentication data
         ]
         // Encode the CBOR structure into binary data
         let encoded = dict.encode()
