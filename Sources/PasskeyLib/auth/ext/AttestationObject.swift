@@ -67,4 +67,4 @@ internal func extractPublicKey(from attestationObject: AttestationObject) -> Dat
    // The public key is typically found in the attestedCredentialData part of the authenticatorData
    let publicKey = authenticatorData.attestedCredentialData?.credentialPublicKey
    return publicKey
-   }
+}
