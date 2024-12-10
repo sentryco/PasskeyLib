@@ -60,7 +60,7 @@ extension Curve25519.Signing.PrivateKey {
          * Verify the ASN.1 data starts with the expected prefix.
          */
         guard asn1Data.starts(with: privateKeyASN1Prefix) else {
-            log.debug("ASN1 does not match the expected prefix")
+            print("ASN1 does not match the expected prefix")
             throw CryptoKitError.invalidParameter
         }
         /**

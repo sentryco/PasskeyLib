@@ -15,7 +15,8 @@ extension ASPasskeyCredentialIdentity {
      */
     func asPasskeyCredentialIdentity(recordIdentifier: String?, username: String, credentialID: Data, userHandle: Data) -> ASPasskeyCredentialIdentity {
         .init(
-            relyingPartyIdentifier: relyingParty, // The identifier for the relying party (e.g., a server) that the credential is associated with.
+            // - Fixme: ⚠️️ get relyingParty from somewhere
+            relyingPartyIdentifier: "", // The identifier for the relying party (e.g., a server) that the credential is associated with.
             userName: username, // The username associated with the credential.
             credentialID: credentialID, // Unique identifier for the credential.
             userHandle: userHandle, // Data representing the user handle.

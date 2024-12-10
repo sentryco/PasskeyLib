@@ -22,12 +22,12 @@ extension ASAuthorizationPlatformPublicKeyCredentialRegistration {
         let credentialID = credential.credentialID
         let rawClientDataJSON = credential.rawClientDataJSON
         // Encoding raw data to Base64 strings for secure transmission or storage
-        let attestationObjectBase64 = rawAttestationObject.base64EncodedString()
+        // let attestationObjectBase64 = rawAttestationObject.base64EncodedString()
         let credentialIDBase64 = credentialID.base64EncodedString()
         // Uncomment the following line if client data needs to be Base64 encoded
         // let clientDataJSONBase64 = rawClientDataJSON.base64EncodedString()
         // Attempt to parse the clientDataJSON to extract useful information
-       let clientDataObj: (type: String?, challenge: String?, origin: String?)
+        var clientDataObj: (type: String?, challenge: String?, origin: String?)? = nil
         if let clientData = try? JSONSerialization.jsonObject(with: rawClientDataJSON, options: []) as? [String: Any] {
             // Extracting the type of request (registration or authentication)
             let type = clientData["type"] as? String
@@ -55,7 +55,7 @@ extension ASAuthorizationPlatformPublicKeyCredentialRegistration {
        
        return .init(
          credentialID: credentialIDBase64,
-         relyingParty: clientDataObj.origin ?? "",
+         relyingParty: clientDataObj?.origin ?? "",
          username: "",
          userHandle: "",
          publicKey: publicKeyBase64,
