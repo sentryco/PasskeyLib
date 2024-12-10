@@ -2,23 +2,25 @@ import CryptoKit
 import Foundation
 
 extension PKSigning {
-    /// Signs a given challenge using a private key.
-    /// This method attempts to sign the challenge using ES256 and if it fails, tries Ed25519.
-    ///
-    /// - Parameters:
-    ///   - challenge: The data to be signed.
-    ///   - privateKey: The PEM representation of the private key.
-    /// - Returns: The signature as `Data` or `nil` if signing fails.
+    /**
+     * Signs a given challenge using a private key.
+     * - Description: This method attempts to sign the challenge using ES256 and if it fails, tries Ed25519.
+     * - Parameters:
+     *   - challenge: The data to be signed.
+     *   - privateKey: The PEM representation of the private key.
+     * - Returns: The signature as `Data` or `nil` if signing fails.
+     */
     internal func signWithPrivateKey(_ challenge: Data, privateKey: String) -> Data? {
         return signUsingES256(challenge, privateKey: privateKey) ?? signUsingEd25519(challenge, privateKey: privateKey)
     }
-
-    /// Signs a given challenge using ES256 algorithm.
-    ///
-    /// - Parameters:
-    ///   - challenge: The data to be signed.
-    ///   - privateKey: The PEM representation of the ES256 private key.
-    /// - Returns: The DER representation of the signature or `nil` if an error occurs.
+    /**
+     * Signs a given challenge using ES256 algorithm.
+     * - Fixme: ⚠️️ add description, use copilot
+     * - Parameters:
+     *   - challenge: The data to be signed.
+     *   - privateKey: The PEM representation of the ES256 private key.
+     * - Returns: The DER representation of the signature or `nil` if an error occurs.
+     */
     internal func signUsingES256(_ challenge: Data, privateKey: String) -> Data? {
         let privateKey: P256.Signing.PrivateKey
         do {
@@ -38,13 +40,14 @@ extension PKSigning {
             return nil
         }
     }
-
-    /// Signs a given challenge using Ed25519 algorithm.
-    ///
-    /// - Parameters:
-    ///   - challenge: The data to be signed.
-    ///   - privateKey: The PEM representation of the Ed25519 private key.
-    /// - Returns: The signature as `Data` or `nil` if an error occurs.
+    /**
+     * Signs a given challenge using Ed25519 algorithm.
+     * - Fixme: ⚠️️ add description, use copilot
+     * - Parameters:
+     *   - challenge: The data to be signed.
+     *   - privateKey: The PEM representation of the Ed25519 private key.
+     * - Returns: The signature as `Data` or `nil` if an error occurs.
+     */
     internal func signUsingEd25519(_ challenge: Data, privateKey: String) -> Data? {
         let privateKey: Curve25519.Signing.PrivateKey
         do {
