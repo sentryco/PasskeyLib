@@ -1,3 +1,5 @@
+import Foundation
+import CryptoKit
 /**
  * Generates authenticator data for a given relying party.
  * _ Description: This function constructs a byte sequence that represents authenticator data used in cryptographic operations. It includes the SHA-256 hash of the relying party identifier, user presence and verification flags, and a signature counter.
@@ -5,8 +7,10 @@
  * - Returns: A `Data` object representing the authenticator data.
  */
 internal func authenticatorData(relyingParty: String) -> Data {
+    // Convert the relying party identifier to Data using UTF-8 encoding.
+    let rpIDData = Data(relyingParty.utf8)
     // Compute SHA-256 hash of the relying party identifier.
-    let rpIDHash = relyingParty.utf8data.sha256.asData
+    let rpIDHash = Data(SHA256.hash(data: rpIDData))
     // Define flags indicating user presence, verification, and other attributes.
     let flags = AuthDataFlags.uv | AuthDataFlags.up | AuthDataFlags.be | AuthDataFlags.bs
     // Initialize a counter to zero, represented as 4 bytes of zero data.
