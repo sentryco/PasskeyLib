@@ -55,7 +55,7 @@ Make sure to set the following in your extension's Info.plist:
 
 In the CredentialProvider / AutoFill extension:
 
-`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES`
+`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES`  
 `Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasswords = YES`
 
 **Implement passkey support in AutoFill extension:**  
@@ -91,6 +91,5 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 - Interesting webhauthn + passkeys. comprehensive + has nice gifs: https://github.com/lyokato/WebAuthnKit-iOS/tree/develop
 
 ### Todo: 
-- Add the popular packages for passkeys from that issue. Add it to thihs readme
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.
 
