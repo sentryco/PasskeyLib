@@ -10,7 +10,7 @@ extension CBOR {
      * - Returns: A `Data` object containing the CBOR-encoded public key
      * - Throws: An error if the public key size does not match the expected size
      */
-    internal static func cborEncodePublicKey(_ publicKey: P256.Signing.PublicKey) -> Data {
+   internal static func cborEncodePublicKey(_ publicKey: P256.Signing.PublicKey, publicKeySizeInBytes: Int) -> Data {
         let rawPublicKey = publicKey.rawRepresentation
         // Ensure the public key is of the expected size, otherwise log an error and fail the operation
         guard rawPublicKey.count == publicKeySizeInBytes else {
@@ -39,7 +39,7 @@ extension CBOR {
      * - Parameter authData: The authentication data to encode
      * - Returns: A `Data` object containing the CBOR-encoded attestation data
      */
-    private static func cborEncodeAttestation(_ authData: Data) -> Data {
+    internal static func cborEncodeAttestation(_ authData: Data) -> Data {
         // Define the structure of the attestation data in CBOR format
         let dict: CBOR = [
             "fmt": "none", // Format of the attestation statement

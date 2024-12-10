@@ -12,8 +12,8 @@ extension PKData {
      * - Throws: `PasskeyRegistrationError.unsupportedAlgorithm` if ES256 is not supported.
      * - Returns: A `NewPasskey` instance initialized with the provided parameters.
      */
-    func init(with params: PKRegistration) throws -> NewPasskey {
-        /** 
+    func init(with params: PKRegistration) throws -> Self {
+        /**
          * Ensure the ES256 algorithm is supported
          */
         guard params.supportedAlgorithms.contains(.ES256) else {

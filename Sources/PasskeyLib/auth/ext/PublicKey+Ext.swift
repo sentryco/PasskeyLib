@@ -1,4 +1,5 @@
 import CryptoKit
+import Foundation
 
 extension P256.Signing.PublicKey {
     /** Verifies a signature for given data using this public key.

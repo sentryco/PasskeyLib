@@ -17,11 +17,12 @@ extension ASAuthorizationPlatformPublicKeyCredentialRegistration {
         let credentialID = credential.credentialID
         let rawClientDataJSON = credential.rawClientDataJSON
         // Encoding raw data to Base64 strings for secure transmission or storage
-        let attestationObjectBase64 = rawAttestationObject.base64EncodedString()
+        let attestationObjectBase64 = rawAttestationObject?.base64EncodedString()
         let credentialIDBase64 = credentialID.base64EncodedString()
         // Uncomment the following line if client data needs to be Base64 encoded
         // let clientDataJSONBase64 = rawClientDataJSON.base64EncodedString()
         // Attempt to parse the clientDataJSON to extract useful information
+       let clientDataObj: (type: String?, challenge: String?, origin: String?)
         if let clientData = try? JSONSerialization.jsonObject(with: rawClientDataJSON, options: []) as? [String: Any] {
             // Extracting the type of request (registration or authentication)
             let type = clientData["type"] as? String
@@ -31,27 +32,23 @@ extension ASAuthorizationPlatformPublicKeyCredentialRegistration {
             let origin = clientData["origin"] as? String
             // Logging the extracted information
             print("Type: \(type ?? ""), Challenge: \(challenge ?? ""), Origin: \(origin ?? "")")
+            clientDataObj = (type, challenge, origin)
         }
         // Decoding the attestation object to extract cryptographic proofs
         guard let attestationObject = decodeAttestationObject(rawAttestationObject) else {
             print("Failed to decode attestation object.")
-            return
+            return nil
         }
         // Extracting the public key from the attestation data
         guard let publicKey = extractPublicKey(from: attestationObject) else {
             print("Failed to get public key")
-            return 
+            return nil
         }
         let publicKeyBase64 = publicKey.base64EncodedString()
         print("Public Key: \(publicKeyBase64)")
         // Creating a passkey data structure to encapsulate
-        let passkey = PKData(
-            credentialID: credentialIDBase64, 
-            relyingParty: origin, 
-            user: user, publicKey: 
-            publicKeyBase64, 
-            privateKey: privateKeyBase64
-        )
+       
+       let passkey = PKData.init(credentialID: credentialIDBase64, relyingParty: clientDataObj.origin ?? "", username: "", userHandle: "", publicKey: publicKeyBase64, privateKey: privateKeyBase64)
         return passkey
     }
 

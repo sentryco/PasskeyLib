@@ -1,4 +1,5 @@
 import CryptoKit
+import Foundation
 
 /** Validates the authenticity of a signature using the provided public key and data.
  * - Description: This function attempts to verify a digital signature by using the public key to ensure that
