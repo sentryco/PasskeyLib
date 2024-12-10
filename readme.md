@@ -55,7 +55,7 @@ Make sure to set the following in your extension's Info.plist:
 
 In the CredentialProvider / AutoFill extension:
 
-`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES`
+`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES`  
 `Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasswords = YES`
 
 **Implement passkey support in AutoFill extension:**  
