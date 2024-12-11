@@ -8,6 +8,7 @@ class YourTestClassTests: XCTestCase {
    func test() {
       do {
          try Self.testPasskeyInitiation()
+//         try Self.testPasskeyValidation()
          try Self.testCodable()
       } catch {
          Swift.print("error:  \(error.localizedDescription)")
