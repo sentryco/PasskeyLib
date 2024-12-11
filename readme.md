@@ -1,3 +1,5 @@
+[![Tests](https://github.com/sentryco/PasskeyLib/actions/workflows/Tests.yml/badge.svg)](https://github.com/sentryco/PasskeyLib/actions/workflows/Tests.yml)
+
 # PasskeyLib
 
 > Simplifies passkey storage and validation
