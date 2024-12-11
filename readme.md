@@ -9,7 +9,7 @@ Simplifies passkey storage and validation
 
 ### Example Usage:
 
-To generate a new passkey, you would typically interact with the `PKSigning` class to create a signature using a private key. Here's how you can use the `PKSigning` class to sign a challenge:
+To generate a new passkey, you would typically interact with the `PKSigner` class to create a signature using a private key. Here's how you can use the `PKSigner` class to sign a challenge:
 
 This example demonstrates initializing a challenge and signing it using a private key. The resulting signature is then printed in a base64 encoded string format. 
 
@@ -18,19 +18,18 @@ import PasskeyLib
 
 let challengeData = Data("your-challenge-string".utf8)
 let privateKey = "your-private-key-string"
-let signature = PKSigning.signWithPrivateKey(challengeData, privateKey: privateKey)
+let signature = PKSigner.signWithPrivateKey(challengeData, privateKey: privateKey)
 
 if let signature = signature {
     print("Signature: \(signature.base64EncodedString())")
 } else {
     print("Failed to generate signature.")
 }
-
 ``` 
 
 Verifying a Passkey After a passkey is generated and used in an authentication attempt, the server needs to verify the signature against the stored public key. This step ensures that the signature was created by the authenticator possessing the corresponding private key. 
 
-This snippet shows how to verify a signature using the `PKSigning` class. It checks if the signature received from the client matches the one generated using the stored public key. 
+This snippet shows how to verify a signature using the `PKValidator` class. It checks if the signature received from the client matches the one generated using the stored public key. 
 
 ```swift 
 import PasskeyLib
@@ -39,7 +38,7 @@ let publicKey = "your-public-key-string"
 let signature = Data(base64Encoded: "your-received-signature-string")!
 let challengeData = Data("your-challenge-string".utf8)
 
-let isValid = PKSigning.verifySignature(signature, publicKey: publicKey, challenge: challengeData)
+let isValid = PKValidator.verifySignature(signature, publicKey: publicKey, challenge: challengeData)
 
 if isValid {
     print("Authentication successful.")
@@ -47,6 +46,18 @@ if isValid {
     print("Authentication failed.")
 }
 ``` 
+
+Creating an Assertion Credential (ASPasskeyAssertionCredential)
+
+```swift
+let clientDataHash: Data = /* your client data hash */
+let privateKeyStr: String = /* your private key string */
+if let credential = getAssertionCredential(clientDataHash: clientDataHash, privateKeyStr: privateKeyStr) {
+    // Use the credential as needed
+} else {
+    print("Failed to create assertion credential")
+}
+```
 
 ### Instalation:
 

@@ -12,10 +12,11 @@ extension ASPasskeyCredentialIdentity {
      *   - credentialID: A blob of data that uniquely identifies the credential. This is used by the authentication system to locate the credential.
      *   - userHandle: A blob of data that represents the user handle. This is used to associate the credential with a specific user entity.
      * - Returns: An `ASPasskeyCredentialIdentity` instance populated with the provided data.
+     * - Fixme: ⚠️️ this is missing some code, figure it out
      */
-    func asPasskeyCredentialIdentity(recordIdentifier: String?, username: String, credentialID: Data, userHandle: Data) -> ASPasskeyCredentialIdentity {
+    func getASPasskeyCredentialIdentity(recordIdentifier: String?, username: String, credentialID: Data, userHandle: Data) -> ASPasskeyCredentialIdentity {
         .init(
-            // - Fixme: ⚠️️ get relyingParty from somewhere
+            // - Fixme: ⚠️️ get relyingParty from somewhere?
             relyingPartyIdentifier: "", // The identifier for the relying party (e.g., a server) that the credential is associated with.
             userName: username, // The username associated with the credential.
             credentialID: credentialID, // Unique identifier for the credential.
