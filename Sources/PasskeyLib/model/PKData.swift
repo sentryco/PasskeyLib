@@ -32,13 +32,13 @@ public struct PKData: Codable {
      */
     public let userHandle: String
     /**
-     * The public key associated with the passkey, stored as a base64 encoded string.
-     * - Description: This key is used during the authentication process to verify the user's identity. "MIIBIjANBgkqhkiG9w0BAQE...""
-     */
-    public let publicKey: String
-    /**
      * The private key associated with the passkey, stored securely.
      * - Description: This key should be stored in a manner that prevents unauthorized access, as it is used to authenticate the user by proving ownership of the corresponding public key.
      */
     public let privateKey: String
 }
+/**
+ * The public key associated with the passkey, stored as a base64 encoded string.
+ * - Description: This key is used during the authentication process to verify the user's identity. "MIIBIjANBgkqhkiG9w0BAQE...""
+ */
+//    public let publicKey: String

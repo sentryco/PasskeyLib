@@ -52,7 +52,7 @@ extension PKData {
          relyingParty: relyingParty,
          username: username,
          userHandle: userHandle.base64EncodedString(),
-         publicKey: "", // - Fixme: ⚠️️ get this from somewhere?
+//         publicKey: "", // - Fixme: ⚠️️ get this from somewhere?
          privateKey: privateKey.pemRepresentation
       )
    }

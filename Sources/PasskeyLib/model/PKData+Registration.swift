@@ -10,23 +10,29 @@ extension PKData {
     * - Note: Override handlePasskeyRegistration in ASAuthorizationPlatformPublicKeyCredentialRegistration and call this to save passkey to storage
     * - Parameter credential: The credential received during the registration process.
     * - Parameter privateKeyBase64: - Fixme: ⚠️️ add doc
+    * - Parameter username: - Fixme: ⚠️️ not sure if we should have this param, consider it later
     * - Returns: - Fixme: ⚠️️ add doc
     * - Fixme: ⚠️️ rename to getPKData
+    * - Fixme: ⚠️️ break up this method
     */
-   public func getPKData(credential: ASAuthorizationPlatformPublicKeyCredentialRegistration, privateKeyBase64: String) -> PKData? {
+   public func getPKData(credential: ASAuthorizationPlatformPublicKeyCredentialRegistration, privateKeyBase64: String, username: String) -> PKData? {
       // Accessing raw data components from the credential
-      guard let rawAttestationObject = credential.rawAttestationObject else {
+      guard let rawAttestationObject: Data = credential.rawAttestationObject else {
          print("unable to extract raw attestation object")
          return nil
       }
       let credentialID = credential.credentialID
       let rawClientDataJSON = credential.rawClientDataJSON
       //
-       let attestationObjectBase64 = rawAttestationObject.base64EncodedString()
-      let _ = attestationObjectBase64
+//      _ = {
+//         let attestationObjectBase64: String = rawAttestationObject.base64EncodedString()
+//         let _ = attestationObjectBase64
+//      }
       //
-       let clientDataJSONBase64 = rawClientDataJSON.base64EncodedString()
-      let _ = clientDataJSONBase64
+//      _ = {
+//         let clientDataJSONBase64: String = rawClientDataJSON.base64EncodedString()
+//         let _ = clientDataJSONBase64
+//      }
       // Attempt to parse the clientDataJSON to extract useful information
       guard let clientDataObj: (type: String?, challenge: String?, origin: String?)? = {
          if let clientData = try? JSONSerialization.jsonObject(with: rawClientDataJSON, options: []) as? [String: Any] {
@@ -64,13 +70,12 @@ extension PKData {
       // Creating a passkey data structure to encapsulate
       
       
-      
       return .init(
          credentialID: credentialIDBase64,
          relyingParty: clientDataObj?.origin ?? "",
-         username: "",
-         userHandle: "",
-         publicKey: publicKeyBase64,
+         username: username, // - Fixme: ⚠️️ try to get this from rawClientDataJSON
+         userHandle: credentialIDBase64, 
+//         publicKey: publicKeyBase64,
          privateKey: privateKeyBase64
       )
    }
