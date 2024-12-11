@@ -1,4 +1,5 @@
 [![Tests](https://github.com/sentryco/PasskeyLib/actions/workflows/Tests.yml/badge.svg)](https://github.com/sentryco/PasskeyLib/actions/workflows/Tests.yml)
+[![codebeat badge](https://codebeat.co/badges/180de22b-8712-452f-ab9a-ccdcbf9a558e)](https://codebeat.co/projects/github-com-sentryco-passkeylib-main)
 
 # PasskeyLib
 
