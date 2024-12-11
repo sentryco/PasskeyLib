@@ -1,4 +1,4 @@
-### PasskeyLib
+# PasskeyLib
 
 > Simplifies passkey storage and validation
 
