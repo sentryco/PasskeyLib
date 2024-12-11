@@ -68,16 +68,13 @@ extension PKData {
       // CredentialID
       let credentialIDBase64: String = credentialID.base64EncodedString()
       // Creating a passkey data structure to encapsulate
-      
-      
       return .init(
          credentialID: credentialIDBase64,
          relyingParty: clientDataObj?.origin ?? "",
          username: username, // - Fixme: ⚠️️ try to get this from rawClientDataJSON
-         userHandle: credentialIDBase64, 
-//         publicKey: publicKeyBase64,
+         userHandle: credentialIDBase64,
+         // publicKey: publicKeyBase64,
          privateKey: privateKeyBase64
       )
    }
-
 }

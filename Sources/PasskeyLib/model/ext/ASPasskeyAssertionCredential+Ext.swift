@@ -5,9 +5,23 @@ import AuthenticationServices
 extension ASPasskeyAssertionCredential {
    /**
     * Generates an assertion credential using the provided client data hash and private key string.
+    *
     * - Parameter clientDataHash: The hash of the client data used in the assertion.
     * - Parameter privateKeyStr: The private key in string format used to sign the challenge.
     * - Returns: An optional `ASPasskeyAssertionCredential` if the signature is successfully created; otherwise, `nil`.
+    *
+    * **Example:**
+    * ```swift
+    * // Assume you have an instance of ASPasskeyAssertionCredential named `assertionCredential`
+    * let clientDataHash = Data(...) // Your client data hash
+    * let privateKeyStr = "MIGTAgE...AB" // Your private key string in PEM or DER format
+    * if let credential = assertionCredential.getAssertionCredential(clientDataHash: clientDataHash, privateKeyStr: privateKeyStr) {
+    *     // Use the `credential` as needed
+    * } else {
+    *     // Handle the error
+    * }
+    * ```
+    * - Fixme: ⚠️️ where do we get clientDataHash from? I think this is the credentialID data obj we get from external source
     */
    public func getAssertionCredential(clientDataHash: Data, privateKeyStr: String) -> ASPasskeyAssertionCredential? {
       let authenticatorData: Data = authenticatorDataObj(relyingParty: relyingParty)
@@ -16,7 +30,7 @@ extension ASPasskeyAssertionCredential {
         // Attempt to sign the challenge with the private key
       guard let signature = PKSigner.signWithPrivateKey(challenge, privateKeyStr: privateKeyStr) else {
             // Return nil if the signature could not be created
-            print("signature could not be created")
+            print("Signature could not be created")
             return nil
         }
         // Create an assertion credential with the necessary components

@@ -6,9 +6,10 @@ import Foundation
  * - Abstract: PKData is used to store a passkey on user device. PKData allows you to authenticate passkey challanges from external services.
  * - Description: This structure encapsulates all necessary details required to manage a passkey credential, including identifiers, user information, and cryptographic keys.
  * - Note: Consider renaming to `AuthenticationCredential` for clarity.
+ * - Remark: Properties in PKData are binary data, we use Base64-encode on these individual properties before JSON serialization.
  * - Fixme: ⚠️️ Consider adding `displayName` to provide a human-readable name for the passkey.
  */
-public struct PKData: Codable {
+public struct PKData: Codable, Equatable {
     /**
      * A unique identifier for the passkey, encoded in base64.
      * - Description: This is typically used to reference the passkey in a database or similar storage system.
