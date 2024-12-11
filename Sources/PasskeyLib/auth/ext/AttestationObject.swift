@@ -74,3 +74,15 @@ internal func extractPublicKey(from attestationObject: AttestationObject) -> Dat
       return .init()
    }
 }
+
+
+//public struct Attestation {
+//   public let credentialId: String
+//   public let clientDataJson: String
+//   public let attestationObject: String
+//}
+
+//public struct PasskeyRegistrationResult {
+//   public let challenge: String
+//   public let attestation: Attestation
+//}

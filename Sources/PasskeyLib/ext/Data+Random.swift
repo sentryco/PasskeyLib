@@ -20,9 +20,9 @@ extension Data {
    /**
     * - Fixme: ⚠️️ add doc
     */
-   var hexValue: String {
-      return reduce("") { $0 + String(format: "%02x", $1) }
-   }
+//   var hexValue: String {
+//      return reduce("") { $0 + String(format: "%02x", $1) }
+//   }
 }
 
 /// Generates a random buffer to be used as a challenge in passkey operations.
