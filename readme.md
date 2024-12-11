@@ -101,6 +101,8 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 - Very small sample project for passkeys https://github.com/hansemannn/iOS16-Passkeys-Sample/tree/main
 - Interesting webhauthn + passkeys. comprehensive + has nice gifs: https://github.com/lyokato/WebAuthnKit-iOS/tree/develop
 - Lots of passkey code for swift: https://github.com/tkhq/swift-sdk/blob/35a3f203d406eaaf64cc647f4c001deddb69c365/Sources/Shared/PasskeyManager.swift
+- AttestationObj etc: https://github.com/Dashlane/apple-apps/tree/e66b4b162ac898c751b9ca0403dcb792cf70a566/Packages/Foundation/AppleWebAuthn/Sources/WebAuthn
+- More AttestationObj: https://github.com/ForgeRock/forgerock-ios-sdk/tree/57567fd627c10cd3432cb53749f851abec755a67/FRAuth/FRAuth/WebAuthn/Authenticator
 
 ### Todo: 
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.

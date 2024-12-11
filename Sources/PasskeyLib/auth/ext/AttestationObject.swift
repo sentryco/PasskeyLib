@@ -39,7 +39,10 @@ struct AttestationObject {
         // Assign the extracted attestation statement map to the attestationStatement property
         self.attestationStatement = attStmt
         // Initialize the authData property with the extracted authenticator data bytes
-        self.authData = AuthenticatorData(data: Data(authDataBytes))
+       // - Fixme: ⚠️️ add this later
+       let _ = authDataBytes
+//        self.authData = AuthenticatorData(data: Data(authDataBytes))
+       fatalError()
     }
 }
 /**
@@ -63,8 +66,11 @@ internal func decodeAttestationObject(_ attestationData: Data) -> AttestationObj
  */
 internal func extractPublicKey(from attestationObject: AttestationObject) -> Data? {
    // Access authenticator data and extract the public key
-   let authenticatorData = attestationObject.authData
+   let authenticatorData: AuthenticatorData = attestationObject.authData
    // The public key is typically found in the attestedCredentialData part of the authenticatorData
-   let publicKey = authenticatorData.attestedCredentialData?.credentialPublicKey
-   return publicKey
+   if let publicKey = authenticatorData.attestedData?.publicKey {
+      return Data.init(publicKey)
+   } else {
+      return .init()
+   }
 }

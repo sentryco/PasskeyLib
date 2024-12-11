@@ -37,6 +37,7 @@ extension PKData {
     */
    public init(relyingParty: String, username: String, userHandle: Data) {
       // Fixed UUID for the AAGUID (Authenticator Attestation GUID)
+      // - Fixme: ⚠️️ get this from init param?
       let aaguid = UUID(uuidString: "EFAA1234-ABCD-5678-90EF-1234567890AB")!
       _ = aaguid // - Fixme: ⚠️️ use this somehow
       // Initialize a new private key for signing
@@ -44,17 +45,7 @@ extension PKData {
       // Define the size of the credential ID in bytes
       let credentialIDSizeInBytes = 32
       // Generate a random credential ID or use an empty data if generation fails
-      var credentialID = Data(count: credentialIDSizeInBytes)
-      let result = credentialID.withUnsafeMutableBytes { mutableBytes in
-         guard let baseAddress = mutableBytes.baseAddress else {
-            return errSecParam
-         }
-         return SecRandomCopyBytes(kSecRandomDefault, credentialIDSizeInBytes, baseAddress)
-      }
-      if result != errSecSuccess {
-         print("Failed to generate random bytes for credential ID")
-         credentialID = Data()
-      }
+      let credentialID = Data.init(random: credentialIDSizeInBytes) ?? .init()
       // Call the designated initializer with the new values
       self = PKData(
          credentialID: credentialID.base64EncodedString(),
