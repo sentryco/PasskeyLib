@@ -1,7 +1,6 @@
 ### PasskeyLib
 
-### Description:
-Simplifies passkey storage and validation
+> Simplifies passkey storage and validation
 
 ### Features: 
 - Passkey data-object for storing passkey data
