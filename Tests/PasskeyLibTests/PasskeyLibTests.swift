@@ -5,22 +5,18 @@ import Foundation
 @testable import PasskeyLib
 
 class YourTestClassTests: XCTestCase {
-   /*@Test */func test() /*async  */ {
-//      Swift.print("example")
+   func test() {
       do {
-         /*try await */try Self.testPasskeyInitiation()
-         // try await TestClass.testPasskeyValidation()
-         /*try await */try Self.testCodable()
+         try Self.testPasskeyInitiation()
+         try Self.testCodable()
       } catch {
          Swift.print("error:  \(error.localizedDescription)")
       }
    }
 }
 extension YourTestClassTests {
-   
    // 1. Test initiating a passkey
-   private static func testPasskeyInitiation() /*async */throws {
-//      Swift.print("testPasskeyInitiation")
+   private static func testPasskeyInitiation() throws {
       let pkData = PKData.init(
          relyingParty: "example.com",
          username: "alice",
@@ -49,8 +45,8 @@ extension YourTestClassTests {
    }
    // 2. Test Passkey Validation
    // - Fixme: ⚠️️ add invalidate case as well
-   private static func testPasskeyValidation() /*async*/ throws {
-//      Swift.print("testPasskeyValidation")
+   private static func testPasskeyValidation() throws {
+      // Swift.print("testPasskeyValidation")
       let publicKey = Data(base64Encoded: "your-public-key-string")!
       let signature = Data(base64Encoded: "your-received-signature-string")!
       let challengeData = Data("your-challenge-string".utf8)
@@ -63,34 +59,28 @@ extension YourTestClassTests {
       XCTAssertTrue(isValid)
    }
    // 3. test codable conversion
-   private static func testCodable() /*async*/ throws {
-//      Swift.print("testCodable")
+   private static func testCodable() throws {
+      // Swift.print("testCodable")
       let pkData: PKData = .init(
          relyingParty: "example.com",
          username: "alice",
          userHandle: UUID().uuidString.data(using: .utf8)!
       )
-      
       let data: Data = try JSONEncoder().encode(pkData)
-      
       // Convert JSON Data to String
       guard let jsonString = String(data: data, encoding: .utf8) else {
          print("Failed to convert data to JSON string")
          throw NSError(domain: "err json str", code: 0)
       }
-      
       // Convert jsonString back to Data
       guard let jsonData = jsonString.data(using: .utf8) else {
          print("Failed to convert JSON string back to Data")
          throw NSError(domain: "err json data", code: 0)
       }
-      
       print("JSON String: \(jsonString)")
       let newPkData = try JSONDecoder().decode(PKData.self, from: jsonData)
-      
       let equals = newPkData == pkData
       XCTAssertTrue(equals)
-      
       print("equals: \(equals ? "✅" : "🚫")")
    }
 }

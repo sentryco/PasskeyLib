@@ -9,6 +9,12 @@
 - Passkey data-object for storing passkey data
 - Passkey signing / validation / assertion / verification
 
+### Instalation: 
+Swift package manager: 
+```swift
+.package(url: "https://github.com/sentryco/PasskeyLib", branch: "main")
+```
+
 ### Example Usage:
 
 To generate a new passkey, you would typically interact with the `PKSigner` class to create a signature using a private key. Here's how you can use the `PKSigner` class to sign a challenge:
@@ -61,7 +67,7 @@ if let credential = getAssertionCredential(clientDataHash: clientDataHash, priva
 }
 ```
 
-### Instalation:
+### Config:
 
 Make sure to set the following in your extension's Info.plist:
 `<key>ProvidesPasskeys</key><true/>`
