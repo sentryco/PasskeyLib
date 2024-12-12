@@ -111,6 +111,7 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 - Lots of passkey code for swift: https://github.com/tkhq/swift-sdk/blob/35a3f203d406eaaf64cc647f4c001deddb69c365/Sources/Shared/PasskeyManager.swift
 - AttestationObj etc: https://github.com/Dashlane/apple-apps/tree/e66b4b162ac898c751b9ca0403dcb792cf70a566/Packages/Foundation/AppleWebAuthn/Sources/WebAuthn
 - More AttestationObj: https://github.com/ForgeRock/forgerock-ios-sdk/tree/57567fd627c10cd3432cb53749f851abec755a67/FRAuth/FRAuth/WebAuthn/Authenticator
+- Fido2 code for iOS: https://github.com/dqj1998/dFido2Lib-ios
 
 ### Todo: 
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.
