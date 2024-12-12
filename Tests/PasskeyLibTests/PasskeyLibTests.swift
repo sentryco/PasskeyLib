@@ -61,25 +61,14 @@ extension YourTestClassTests {
    }
    // 3. test codable conversion
    private static func testCodable() throws {
-      // Swift.print("testCodable")
       let pkData: PKData = .init(
          relyingParty: "example.com",
          username: "alice",
          userHandle: UUID().uuidString.data(using: .utf8)!
       )
-      let data: Data = try JSONEncoder().encode(pkData)
       // Convert JSON Data to String
-      guard let jsonString = String(data: data, encoding: .utf8) else {
-         print("Failed to convert data to JSON string")
-         throw NSError(domain: "err json str", code: 0)
-      }
-      // Convert jsonString back to Data
-      guard let jsonData = jsonString.data(using: .utf8) else {
-         print("Failed to convert JSON string back to Data")
-         throw NSError(domain: "err json data", code: 0)
-      }
-      print("JSON String: \(jsonString)")
-      let newPkData = try JSONDecoder().decode(PKData.self, from: jsonData)
+      let jsonString: String = try pkData.getJsonString()
+      let newPkData: PKData = try .init(passKeyJsonString: jsonString)
       let equals = newPkData == pkData
       XCTAssertTrue(equals)
       print("equals: \(equals ? "✅" : "🚫")")
