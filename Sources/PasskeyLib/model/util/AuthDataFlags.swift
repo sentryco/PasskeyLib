@@ -1,7 +1,6 @@
 import Foundation
 
-typealias AuthDataFlags = AuthenticatorDataFlags
-enum AuthenticatorDataFlags {
+enum AuthDataFlags {
    static let up: UInt8   = 0x01
    static let rfu1: UInt8 = 0x02
    static let uv: UInt8   = 0x04
