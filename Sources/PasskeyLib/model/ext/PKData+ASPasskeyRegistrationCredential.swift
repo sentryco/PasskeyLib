@@ -7,7 +7,7 @@ extension PKData {
     * - Returns: - Fixme: ⚠️️ Add doc
     */
    @available(iOS 18.0, macOS 15.0, *) // - Fixme: ⚠️️ Move this inside as a guard?
-   func getRegistrationCredential(clientDataHash: Data) -> ASPasskeyRegistrationCredential? {
+   public func getRegistrationCredential(clientDataHash: Data) -> ASPasskeyRegistrationCredential? {
       guard let credentialIDData = self.credentialIDData else {
          Swift.print("Err credentialIDData")
          return nil

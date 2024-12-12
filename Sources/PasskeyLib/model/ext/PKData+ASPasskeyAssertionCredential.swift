@@ -21,12 +21,12 @@ extension PKData {
     * - Returns: An optional `ASPasskeyAssertionCredential` if the signature is successfully created; otherwise, `nil`.
     * - Fixme: ⚠️️ where do we get clientDataHash from? I think this is the credentialID data obj we get from external source
     */
-   public func getAssertionCredential(clientDataHash: Data, privateKeyStr: String) -> ASPasskeyAssertionCredential? {
+   public func getAssertionCredential(clientDataHash: Data) -> ASPasskeyAssertionCredential? {
       let authenticatorData: Data = authenticatorDataObj(relyingParty: relyingParty)
       // Combine the authenticator data with the client data hash to form the challenge
       let challenge = authenticatorData + clientDataHash
       // Attempt to sign the challenge with the private key
-      guard let signature = PKSigner.signWithPrivateKey(challenge, privateKeyStr: privateKeyStr) else {
+      guard let signature = PKSigner.signWithPrivateKey(challenge, privateKeyStr: self.privateKey) else {
          // Return nil if the signature could not be created
          print("Signature could not be created")
          return nil
