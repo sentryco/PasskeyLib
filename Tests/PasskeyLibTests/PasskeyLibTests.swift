@@ -48,8 +48,8 @@ extension YourTestClassTests {
    // - Fixme: ⚠️️ add invalidate case as well
    private static func testPasskeyValidation() throws {
       // Swift.print("testPasskeyValidation")
-      let publicKey = Data(base64Encoded: "your-public-key-string")!
-      let signature = Data(base64Encoded: "your-received-signature-string")!
+      let publicKey = Data(base64URLEncoded: "your-public-key-string")!
+      let signature = Data(base64URLEncoded: "your-received-signature-string")!
       let challengeData = Data("your-challenge-string".utf8)
       let isValid = try PKValidator.validateSignature(publicKeyData: publicKey, signature: signature, data: challengeData)
       if isValid {

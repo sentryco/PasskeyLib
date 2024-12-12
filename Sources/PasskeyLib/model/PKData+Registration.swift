@@ -25,12 +25,12 @@ extension PKData {
       let rawClientDataJSON = credential.rawClientDataJSON
       //
 //      _ = {
-//         let attestationObjectBase64: String = rawAttestationObject.base64EncodedString()
+//         let attestationObjectBase64: String = rawAttestationObject.base64EncodedString() // use url
 //         let _ = attestationObjectBase64
 //      }
       //
 //      _ = {
-//         let clientDataJSONBase64: String = rawClientDataJSON.base64EncodedString()
+//         let clientDataJSONBase64: String = rawClientDataJSON.base64EncodedString() // use url
 //         let _ = clientDataJSONBase64
 //      }
       // Attempt to parse the clientDataJSON to extract useful information
@@ -63,10 +63,10 @@ extension PKData {
          print("Failed to get public key")
          return nil
       }
-      let publicKeyBase64: String = publicKey.base64EncodedString()
+      let publicKeyBase64: String = publicKey.base64URLEncodedString()
       print("Public Key: \(publicKeyBase64)")
       // CredentialID
-      let credentialIDBase64: String = credentialID.base64EncodedString()
+      let credentialIDBase64: String = credentialID.base64URLEncodedString()
       // Creating a passkey data structure to encapsulate
       return .init(
          credentialID: credentialIDBase64,

@@ -58,10 +58,10 @@ extension PKData {
       let credentialID = Data(random: credentialIDSizeInBytes) ?? .init()
       // Initialize PKData with the generated key and credential ID
       self = PKData(
-         credentialID: credentialID.base64EncodedString(),
+         credentialID: credentialID.base64URLEncodedString(),
          relyingParty: relyingParty,
          username: username,
-         userHandle: userHandle.base64EncodedString(),
+         userHandle: userHandle.base64URLEncodedString(),
          privateKey: privateKey.pemRepresentation
       )
    }

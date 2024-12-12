@@ -57,7 +57,7 @@ extension Curve25519.Signing.PrivateKey {
         /**
          * Decode the base64 string into ASN.1 data.
          */
-        guard let asn1Data = Data(base64Encoded: String(noisyBase64String), options: .ignoreUnknownCharacters) else {
+        guard let asn1Data = Data(base64URLEncoded: String(noisyBase64String)/*, options: .ignoreUnknownCharacters*/) else {
             print("Failed to parse Base64 data")
             throw CryptoKitError.invalidParameter
         }

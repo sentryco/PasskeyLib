@@ -17,6 +17,6 @@ extension Data {
          }
       }
       
-      self.init(base64Encoded: base64String)
+      self.init(base64URLEncoded: base64String)
    }
 }

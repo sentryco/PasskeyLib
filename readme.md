@@ -29,7 +29,7 @@ let privateKey = "your-private-key-string"
 let signature = PKSigner.signWithPrivateKey(challengeData, privateKey: privateKey)
 
 if let signature = signature {
-    print("Signature: \(signature.base64EncodedString())")
+    print("Signature: \(signature.base64URLEncodedString())")
 } else {
     print("Failed to generate signature.")
 }
@@ -43,7 +43,7 @@ This snippet shows how to verify a signature using the `PKValidator` class. It c
 import PasskeyLib
 
 let publicKey = "your-public-key-string"
-let signature = Data(base64Encoded: "your-received-signature-string")!
+let signature = Data(base64URLEncoded: "your-received-signature-string")!
 let challengeData = Data("your-challenge-string".utf8)
 
 let isValid = PKValidator.verifySignature(signature, publicKey: publicKey, challenge: challengeData)
