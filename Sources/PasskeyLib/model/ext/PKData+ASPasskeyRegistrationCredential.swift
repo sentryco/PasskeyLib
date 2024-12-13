@@ -12,12 +12,12 @@ extension PKData {
          Swift.print("Err credentialIDData")
          return nil
       }
-      return .init(
+      return ASPasskeyRegistrationCredential(
          relyingParty: relyingParty,
          clientDataHash: clientDataHash,
          credentialID: credentialIDData,
-         attestationObject: getAttestationObject(),
-         extensionOutput: nil
+         attestationObject: getAttestationObject()// ,
+         // extensionOutput: nil
       )
    }
 }
