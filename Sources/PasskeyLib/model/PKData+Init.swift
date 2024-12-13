@@ -65,4 +65,15 @@ extension PKData {
          privateKey: privateKey.pemRepresentation
       )
    }
+   /**
+    * - Fixme: ⚠️️ add doc
+    */
+   public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
+      self = .init(
+         relyingParty: asPasskeyCredentialIdentity.relyingPartyIdentifier,
+         username: asPasskeyCredentialIdentity.userName,
+         userHandle: asPasskeyCredentialIdentity.userHandle
+      )
+   }
 }
+
