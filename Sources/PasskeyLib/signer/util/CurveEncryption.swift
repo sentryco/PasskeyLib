@@ -5,15 +5,18 @@ import Foundation
  */
 private let pemHeader = "-----BEGIN PRIVATE KEY-----"
 /**
- * - Fixme: ⚠️️ add description, use copilot
+ * The footer string used in PEM encoding to denote the end of a private key.
  */
 private let pemFooter = "-----END PRIVATE KEY-----"
 /**
- * - Fixme: ⚠️️ add description, use copilot
+ * The size of the raw private key in bytes.
+ * - Note: This constant defines the expected length of a raw private key for Curve25519.
  */
 private let rawPrivateKeySize = 32
 /**
  * ASN.1 prefix for Curve25519 private key to ensure the data is correctly formatted.
+ * - Description: This prefix is used to validate and correctly format the ASN.1 data for a Curve25519 private key.
+ * - Note: The prefix ensures that the private key data adheres to the expected structure for Curve25519 keys.
  */
 private let privateKeyASN1Prefix = Data(
     // swiftlint:disable collection_alignment
@@ -31,7 +34,7 @@ extension Curve25519.Signing.PrivateKey {
     /**
      * Initializes a Curve25519 Signing PrivateKey from a PEM string representation.
      * - Description: This initializer decodes a PEM encoded string to extract the raw private key data, validates it against expected ASN.1 prefix, and then initializes the PrivateKey.
-     * - Fixme: ⚠️️ add abstract
+     * - Abstract: This initializer decodes a PEM encoded string to extract the raw private key data, validates it against the expected ASN.1 prefix, and then initializes the PrivateKey.
      * - Parameter pem: The PEM encoded string of the private key.
      * - Throws: `CryptoKitError.invalidParameter` if the PEM format is incorrect or the base64 data is invalid.
      *           `CryptoKitError.incorrectKeySize` if the decoded key size is not as expected.

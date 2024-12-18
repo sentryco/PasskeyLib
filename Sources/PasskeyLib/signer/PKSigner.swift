@@ -7,7 +7,7 @@ extension PKSigner {
    /**
     * Signs a given challenge using a private key.
     * - Description: This method attempts to sign the challenge using ES256 and if it fails, tries Ed25519.
-    * - Fixme: ⚠️️ add abstract
+    * - Abstract: This method attempts to sign the challenge using the ES256 algorithm. If it fails, it tries to sign using the Ed25519 algorithm.
     * - Parameters:
     *   - challenge: The data to be signed.
     *   - privateKey: The PEM representation of the private key.
@@ -24,8 +24,8 @@ extension PKSigner {
 extension PKSigner {
    /**
     * Signs a given challenge using ES256 algorithm.
-    * - Fixme: ⚠️️ add description, use copilot
-    * - Fixme: ⚠️️ add abstract
+    * - Description: This method signs the given challenge using the ES256 algorithm.
+    * - Abstract: This method attempts to sign the challenge using the ES256 algorithm, which is based on the P-256 curve and the ECDSA signature scheme.
     * - Parameters:
     *   - challenge: The data to be signed.
     *   - privateKey: The PEM representation of the ES256 private key.
@@ -51,8 +51,8 @@ extension PKSigner {
    }
    /**
     * Signs a given challenge using Ed25519 algorithm.
-    * - Fixme: ⚠️️ add description, use copilot
-    * - Fixme: ⚠️️ add abstract
+    * - Description: This method signs the given challenge using the Ed25519 algorithm.
+    * - Abstract: This method attempts to sign the challenge using the Ed25519 algorithm, which is based on the EdDSA signature scheme.
     * - Parameters:
     *   - challenge: The data to be signed.
     *   - privateKey: The PEM representation of the Ed25519 private key.

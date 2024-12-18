@@ -1,13 +1,14 @@
-//
-//  Data+EncodingExtensions.swift
-//
-//
-//
-
 import CryptoKit
 import Foundation
-
+/**
+ * Data+Hex
+ */
 extension Data {
+   /**
+    * - Description: Initializes a Data object from a hexadecimal string.
+    * - Returns: A Data object containing the decoded bytes, or nil if the string is not a valid hexadecimal string.
+    * - Parameter hexString: A hexadecimal string to decode.
+    */
    public init?(hexString: String) {
       let len = hexString.count / 2
       var data = Data(capacity: len)
@@ -23,15 +24,19 @@ extension Data {
       }
       self = data
    }
-   
+   /**
+    * - Description: Converts a Data object to a hexadecimal string.
+    * - Returns: A hexadecimal string representation of the Data object.
+    */
    public func toHexString() -> String {
       return map { String(format: "%02x", $0) }.joined()
    }
-   
-   /// Decodes a hexadecimal string into `Data`.
-   /// - Parameter hex: The hexadecimal string to decode.
-   /// - Throws: An error if the string contains non-hexadecimal characters or has an odd length.
-   /// - Returns: A `Data` object containing the decoded bytes.
+   /**
+    * - Description: Decodes a hexadecimal string into `Data`.
+    * - Returns: A `Data` object containing the decoded bytes.
+    * - Parameter hex: The hexadecimal string to decode.
+    * - Throws: An error if the string contains non-hexadecimal characters or has an odd length.
+    */
    public static func decodeHex(_ hex: String) throws -> Data {
       guard hex.count % 2 == 0 else {
          throw DecodingError.oddLengthString
@@ -53,7 +58,9 @@ extension Data {
       
       return data
    }
-   
+   /**
+    * - Description: Represents errors that can occur during hexadecimal decoding.
+    */
    enum DecodingError: Error {
       case oddLengthString
       case invalidHexCharacter

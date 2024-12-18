@@ -3,12 +3,14 @@ import XCTest
 import CryptoKit
 import Foundation
 @testable import PasskeyLib
-
+/**
+ * - Fixme: ⚠️️ Get a hold of synthetic passkey data to test with
+ */
 class YourTestClassTests: XCTestCase {
    func test() {
       do {
          try Self.testPasskeyInitiation()
-//         try Self.testPasskeyValidation()
+         // try Self.testPasskeySignatureValidation()
          try Self.testCodable()
       } catch {
          Swift.print("error:  \(error.localizedDescription)")
@@ -16,9 +18,11 @@ class YourTestClassTests: XCTestCase {
    }
 }
 extension YourTestClassTests {
-   // 1. Test initiating a passkey
+   /**
+    * Test initiating a passkey
+    */
    private static func testPasskeyInitiation() throws {
-      let pkData = PKData.init(
+      let pkData = PKData(
          relyingParty: "example.com",
          username: "alice",
          userHandle: UUID().uuidString.data(using: .utf8)!
@@ -33,7 +37,7 @@ extension YourTestClassTests {
       let privKey = try P256.Signing.PrivateKey.init(pemRepresentation: pkData.privateKey)
       let isPrivateKey32Bytes: Bool = privKey.rawRepresentation.count == 32 // Data(base64URLEncoded: pkData.privateKey)?.count
       print("isPrivateKey32Bytes: \(isPrivateKey32Bytes ? "✅" : "🚫")")
-      //      #expect(isPrivateKey32Bytes) // Check the length of the private key (e.g., 32 bytes for P-256)
+      // #expect(isPrivateKey32Bytes) // Check the length of the private key (e.g., 32 bytes for P-256)
       XCTAssertTrue(isPrivateKey32Bytes)
       
       // Attempt to generate a public key from the private key
@@ -44,9 +48,11 @@ extension YourTestClassTests {
       //      #expect(isPublicKey64Bytes)
       XCTAssertTrue(isPublicKey64Bytes)
    }
-   // 2. Test Passkey Validation
-   // - Fixme: ⚠️️ add invalidate case as well
-   private static func testPasskeyValidation() throws {
+   /**
+    * Test Passkey Signature Validation
+    * - Fixme: ⚠️️ add invalidate case as well
+    */
+   private static func testPasskeySignatureValidation() throws {
       // Swift.print("testPasskeyValidation")
       let publicKey = Data(base64URLEncoded: "your-public-key-string")!
       let signature = Data(base64URLEncoded: "your-received-signature-string")!
@@ -59,7 +65,9 @@ extension YourTestClassTests {
       }
       XCTAssertTrue(isValid)
    }
-   // 3. test codable conversion
+   /**
+    * Test codable conversion
+    */
    private static func testCodable() throws {
       let pkData: PKData = .init(
          relyingParty: "example.com",

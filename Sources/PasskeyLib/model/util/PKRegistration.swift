@@ -21,7 +21,6 @@ import Foundation
  *                          allows the server to choose a compatible algorithm for key generation
  *                          during the credential creation.
  * - Note: Empty credential ID is expected for passkey registrations (identity.credentialID.isEmpty)
- * - Fixme: ⚠️️ use struct here?
  */
 public struct PKRegistration {
    let identity: ASPasskeyCredentialIdentity

@@ -5,45 +5,48 @@ struct AttestationObject {
    /**
     * The format of the attestation statement, typically a string like "none", "packed", "tpm", etc.
     */
-    let format: String
+   let format: String
    /**
     * The attestation statement, which is a CBOR map containing various cryptographic proofs and metadata.
     */
-    let attestationStatement: [CBOR: CBOR]
+   let attestationStatement: [CBOR: CBOR]
    /**
     * The authenticator data, which includes information about the authenticator and the credential.
     */
-    let authData: AuthenticatorData
+   let authData: AuthenticatorData
    /**
-    * - Fixme: ⚠️️ add description
-    * - Parameter cborData: - Fixme: ⚠️️ add doc
+    * - Description: Initializes an `AttestationObject` from a CBOR data structure.
+    * - Returns: An optional `AttestationObject` if the CBOR data structure is valid, otherwise `nil`.
+    * - Parameter cborData: The CBOR data structure to decode.
     */
-    init?(from cborData: CBOR?) {
-        guard
-            let cborData = cborData,
-            case let CBOR.map(cborMap) = cborData,
-            // Extract "fmt" field
-            let fmtCBOR = cborMap[CBOR(stringLiteral: "fmt")],
-            case let CBOR.utf8String(fmt) = fmtCBOR,
-            // Extract "attStmt" field
-            let attStmtCBOR = cborMap[CBOR(stringLiteral: "attStmt")],
-            case let CBOR.map(attStmt) = attStmtCBOR,
-            // Extract "authData" field
-            let authDataCBOR = cborMap[CBOR(stringLiteral: "authData")],
-            case let CBOR.byteString(authDataBytes) = authDataCBOR
-        else {
-            return nil
-        }
-        // Assign the extracted format string to the format property
-        self.format = fmt
-        // Assign the extracted attestation statement map to the attestationStatement property
-        self.attestationStatement = attStmt
-        // Initialize the authData property with the extracted authenticator data bytes
-       // - Fixme: ⚠️️ add this later
-       let _ = authDataBytes
-//        self.authData = AuthenticatorData(data: Data(authDataBytes))
-       fatalError()
-    }
+   init?(from cborData: CBOR?) {
+      guard
+         let cborData = cborData,
+         case let CBOR.map(cborMap) = cborData,
+         // Extract "fmt" field
+         let fmtCBOR = cborMap[CBOR(stringLiteral: "fmt")],
+         case let CBOR.utf8String(fmt) = fmtCBOR,
+         // Extract "attStmt" field
+         let attStmtCBOR = cborMap[CBOR(stringLiteral: "attStmt")],
+         case let CBOR.map(attStmt) = attStmtCBOR,
+         // Extract "authData" field
+         let authDataCBOR = cborMap[CBOR(stringLiteral: "authData")],
+         case let CBOR.byteString(authDataBytes) = authDataCBOR
+      else {
+         return nil
+      }
+      // Assign the extracted format string to the format property
+      self.format = fmt
+      // Assign the extracted attestation statement map to the attestationStatement property
+      self.attestationStatement = attStmt
+      // Initialize the authData property with the extracted authenticator data bytes
+      do {
+         self.authData = try AuthenticatorData(data: Data(authDataBytes))
+      } catch {
+         Swift.print("error:  \(error)")
+         return nil
+      }
+   }
 }
 /**
  * Function to decode the attestation object
@@ -74,15 +77,3 @@ internal func extractPublicKey(from attestationObject: AttestationObject) -> Dat
       return .init()
    }
 }
-
-
-//public struct Attestation {
-//   public let credentialId: String
-//   public let clientDataJson: String
-//   public let attestationObject: String
-//}
-
-//public struct PasskeyRegistrationResult {
-//   public let challenge: String
-//   public let attestation: Attestation
-//}

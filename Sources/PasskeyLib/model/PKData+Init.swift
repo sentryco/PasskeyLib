@@ -12,7 +12,18 @@ extension PKData {
     * - Parameter params: The registration parameters including user and relying party identifiers.
     * - Throws: `PasskeyRegistrationError.unsupportedAlgorithm` if ES256 is not supported.
     * - Returns: A `NewPasskey` instance initialized with the provided parameters.
-    * - Fixme: ⚠️️ add example code for this
+    * - Example:
+    *   ```swift
+    *   let registrationParams = PKRegistration(
+    *       identity: PKIdentity(
+    *           relyingPartyIdentifier: "example.com",
+    *           userName: "alice",
+    *           userHandle: UUID().uuidString.data(using: .utf8)!
+    *       ),
+    *       supportedAlgorithms: [.ES256]
+    *   )
+    *   let newPasskey = try PKData(with: registrationParams)
+    *   ```
     */
    public init(with params: PKRegistration) throws {
       /**
@@ -40,7 +51,6 @@ extension PKData {
     *
     * - Example:
     *   ```swift
-    *   // Example usage of PKData initializer
     *   let userHandle = UUID().uuidString.data(using: .utf8)!
     *   let pkData = PKData(
     *       relyingParty: "example.com",
@@ -66,7 +76,10 @@ extension PKData {
       )
    }
    /**
-    * - Fixme: ⚠️️ add doc
+    * Initializes a new `PKData` instance from an `ASPasskeyCredentialIdentity` object.
+    * - Description: This initializer creates a new `PKData` instance using the provided `ASPasskeyCredentialIdentity`, which contains the relying party identifier, username, and user handle.
+    * - Parameter asPasskeyCredentialIdentity: The `ASPasskeyCredentialIdentity` object containing the necessary data.
+    * - Fixme: ⚠️️ move this to ext of ASPasskeyCredentialIdentity ?
     */
    public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
       self = .init(

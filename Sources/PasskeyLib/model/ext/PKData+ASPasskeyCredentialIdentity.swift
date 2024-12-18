@@ -1,7 +1,9 @@
 import AuthenticationServices
 import CryptoKit
 import Foundation
-
+/**
+ * ASPasskeyCredentialIdentity
+ */
 extension PKData {
     /**
      * Creates an instance of `ASPasskeyCredentialIdentity` using provided parameters.
@@ -9,7 +11,7 @@ extension PKData {
      * - Parameters:
      *   - recordIdentifier: An optional unique identifier for the credential record, used to reference the credential in a database or storage system.
      * - Returns: An `ASPasskeyCredentialIdentity` instance populated with the provided data.
-     * - Fixme: ⚠️️ this is missing some code, figure it out
+     * - Fixme: ⚠️️ this is missing some code, figure it out, still relevant?
      */
     public func getASPasskeyCredentialIdentity(recordIdentifier: String?) -> ASPasskeyCredentialIdentity? {
        guard let userHandleData = self.userHandleData else { print("err"); return nil }

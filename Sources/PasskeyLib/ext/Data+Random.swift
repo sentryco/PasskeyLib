@@ -1,9 +1,12 @@
 import Foundation
-
+/**
+ * Data+Random
+ */
 extension Data {
    /**
-    * - Fixme: ⚠️️ add doc
-    * - Parameter count: - Fixme: ⚠️️ add doc
+    * - Description: Initializes a Data object with random bytes.
+    * - Returns: A Data object containing random bytes, or nil if the random generation fails.
+    * - Parameter count: The number of bytes to generate.
     */
    init?(random count: Int) {
       var keyData = Data(count: count)
@@ -17,16 +20,11 @@ extension Data {
          return nil
       }
    }
-   /**
-    * - Fixme: ⚠️️ add doc
-    */
-//   var hexValue: String {
-//      return reduce("") { $0 + String(format: "%02x", $1) }
-//   }
 }
-
-/// Generates a random buffer to be used as a challenge in passkey operations.
-/// - Returns: A `Data` object containing random bytes.
+/**
+ * - Description: Generates a random buffer to be used as a challenge in passkey operations.
+ * - Returns: A `Data` object containing random bytes.
+ */
 private func generateRandomBuffer(count: Int = 32) -> Data {
    var bytes = [UInt8](repeating: 0, count: 32)
    _ = SecRandomCopyBytes(kSecRandomDefault, bytes.count, &bytes)

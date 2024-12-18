@@ -23,13 +23,13 @@ public struct PKData: Codable, Equatable {
     /**
      * The username associated with the passkey.
      * - Description: This is typically the user's email or a unique username. "user123"
-     * - Fixme: ⚠️️ consider removing this? as its not essential?
+     * - Fixme: ⚠️️ Consider removing this? as its not essential?
      */
     public let username: String
     /**
      * A unique user handle, encoded in base64.
      * - Description: This handle is used to uniquely identify the user independently of other user attributes.  "WVhOa1lYTmtNakl5",
-     * - Fixme: ⚠️️ consider removing this? as its not essential?
+     * - Fixme: ⚠️️ Consider removing this? as its not essential?
      */
     public let userHandle: String
     /**

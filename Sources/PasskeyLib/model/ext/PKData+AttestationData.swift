@@ -50,7 +50,16 @@ extension PKData {
       return attestationObject
    }
 }
+/**
+ * Extension to convert fixed-width integers to byte arrays.
+ * - Description: This extension provides functionality to convert any fixed-width integer type into its byte representation.
+ */
 extension FixedWidthInteger {
+   /**
+    * Converts the integer into an array of bytes.
+    * - Description: This property provides access to the raw bytes that make up the integer value in the system's native byte order.
+    * - Returns: An array of UInt8 bytes representing the integer's binary data.
+    */
    var bytes: [UInt8] {
       withUnsafeBytes(of: self) { Array($0) }
    }
