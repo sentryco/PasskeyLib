@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 
 extension PKData {
    /**
@@ -16,5 +17,20 @@ extension PKData {
     */
    public var credentialIDData: Data? {
       .init(base64URLEncoded: self.credentialID)
+   }
+   /**
+    * - Fixme: ⚠️️ add doc
+    */
+   public var privateKeyStr: String? {
+      let privKey = try? P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
+      return privKey?.rawRepresentation.base64EncodedString() // der format
+   }
+   /**
+    * - Fixme: ⚠️️ add doc
+    */
+   public var publicKeyStr: String? {
+      let privKey = try? P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
+      let publicKey = privKey?.publicKey
+      return publicKey?.rawRepresentation.base64EncodedString() // der format
    }
 }
