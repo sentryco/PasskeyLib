@@ -75,18 +75,10 @@ extension PKData {
          privateKey: privateKey.pemRepresentation
       )
    }
-   /**
-    * Initializes a new `PKData` instance from an `ASPasskeyCredentialIdentity` object.
-    * - Description: This initializer creates a new `PKData` instance using the provided `ASPasskeyCredentialIdentity`, which contains the relying party identifier, username, and user handle.
-    * - Parameter asPasskeyCredentialIdentity: The `ASPasskeyCredentialIdentity` object containing the necessary data.
-    * - Fixme: ⚠️️ move this to ext of ASPasskeyCredentialIdentity ?
-    */
+   // ⚠️️ DEPRECATED ⚠️️
+   @available(*, deprecated, renamed: "ASPasskeyCredentialIdentity.pkData")
    public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
-      self = .init(
-         relyingParty: asPasskeyCredentialIdentity.relyingPartyIdentifier,
-         username: asPasskeyCredentialIdentity.userName,
-         userHandle: asPasskeyCredentialIdentity.userHandle
-      )
+      self = asPasskeyCredentialIdentity.pkData
    }
 }
 
