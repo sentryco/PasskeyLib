@@ -19,14 +19,18 @@ extension PKData {
       .init(base64URLEncoded: self.credentialID)
    }
    /**
-    * - Fixme: ⚠️️ add doc
+    * Retrieves the private key as a base64 encoded string.
+    * - Description: This computed property converts the PEM representation of the private key to a base64 encoded string.
+    * - Returns: The base64 encoded string representation of the private key, or `nil` if the conversion fails.
     */
    public var privateKeyStr: String? {
       let privKey = try? P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
       return privKey?.rawRepresentation.base64EncodedString() // der format
    }
    /**
-    * - Fixme: ⚠️️ add doc
+    * Retrieves the public key as a base64 encoded string.
+    * - Description: This computed property converts the PEM representation of the private key to its corresponding public key and then returns it as a base64 encoded string.
+    * - Returns: The base64 encoded string representation of the public key, or `nil` if the conversion fails.
     */
    public var publicKeyStr: String? {
       let privKey = try? P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
