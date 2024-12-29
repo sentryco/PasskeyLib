@@ -6,8 +6,8 @@
 > Simplifies passkey storage and validation
 
 ### Features: 
-- Passkey data-object for storing passkey data
-- Passkey signing / validation / assertion / verification
+- 🔑 Passkey data-object for storing passkey data
+- 🔏 Passkey signing / validation / assertion / verification
 
 ### Instalation: 
 Swift package manager: 
