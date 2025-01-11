@@ -40,51 +40,37 @@ extension Curve25519.Signing.PrivateKey {
      *           `CryptoKitError.incorrectKeySize` if the decoded key size is not as expected.
      */
     internal init(pemRepresentation pem: String) throws {
-        /**
-         * Trim whitespace and newlines from the PEM string.
-         */
-        let pem = pem.trimmingCharacters(in: .whitespacesAndNewlines)
-        /**
-         * Ensure the PEM string has the correct header and footer.
-         */
-        guard pem.hasPrefix(pemHeader), pem.hasSuffix(pemFooter) else {
+        // Trim whitespace and newlines from the PEM string.
+        let trimmedPem = pem.trimmingCharacters(in: .whitespacesAndNewlines)
+        // Ensure the PEM string has the correct header and footer.
+        guard trimmedPem.hasPrefix(pemHeader), trimmedPem.hasSuffix(pemFooter) else {
             print("Missing PEM header/footer")
             throw CryptoKitError.invalidParameter
         }
-        /**
-         * Remove the header and footer to isolate the base64 encoded string.
-         */
-        let noisyBase64String = pem
-            .dropFirst(pemHeader.count)
-            .dropLast(pemFooter.count)
-        /**
-         * Decode the base64 string into ASN.1 data.
-         */
-        guard let asn1Data = Data(base64URLEncoded: String(noisyBase64String)/*, options: .ignoreUnknownCharacters*/) else {
+        // Extract the base64 encoded string between the PEM headers.
+        let base64String = trimmedPem
+            .replacingOccurrences(of: pemHeader, with: "")
+            .replacingOccurrences(of: pemFooter, with: "")
+            .components(separatedBy: .whitespacesAndNewlines)
+            .joined()
+        // Decode the base64 string into ASN.1 data.
+        guard let asn1Data = Data(base64URLEncoded: base64String) else {
             print("Failed to parse Base64 data")
             throw CryptoKitError.invalidParameter
         }
-        /**
-         * Verify the ASN.1 data starts with the expected prefix.
-         */
+        // Verify the ASN.1 data starts with the expected prefix.
         guard asn1Data.starts(with: privateKeyASN1Prefix) else {
             print("ASN1 does not match the expected prefix")
             throw CryptoKitError.invalidParameter
         }
-        /**
-         * Extract the raw key data by removing the prefix.
-         */
+        // Extract the raw key data by removing the prefix.
         let rawKeyRepresentation = asn1Data.dropFirst(privateKeyASN1Prefix.count)
-        /**
-         * Ensure the raw key data is of the expected size.
-         */
+        // Ensure the raw key data is of the expected size.
         guard rawKeyRepresentation.count == rawPrivateKeySize else {
             print("Unexpected raw key size: \(rawKeyRepresentation.count)")
             throw CryptoKitError.incorrectKeySize
         }
-        /**
-         * Initialize the private key with the raw key data.
-         */
+        // Initialize the private key with the raw key data.
         try self.init(rawRepresentation: rawKeyRepresentation)
     }
 }
