@@ -17,36 +17,42 @@ class YourTestClassTests: XCTestCase {
       }
    }
 }
+/**
+ * Tests
+ */
 extension YourTestClassTests {
    /**
     * Test initiating a passkey
     */
    private static func testPasskeyInitiation() throws {
-      let pkData = PKData(
-         relyingParty: "example.com",
-         username: "alice",
-         userHandle: UUID().uuidString.data(using: .utf8)!
-      )
-      // Check credentialID bytes length
-      let is32Bytes: Bool = Data(base64URLEncoded: pkData.credentialID)?.count == 32
-      print("is32Bytes: \(is32Bytes ? "✅" : "🚫")")
-      // #expect(is32Bytes) // CredentialID should be 32 bytes
-      XCTAssertTrue(is32Bytes)
-      
-      // Check privkey length
-      let privKey = try P256.Signing.PrivateKey.init(pemRepresentation: pkData.privateKey)
-      let isPrivateKey32Bytes: Bool = privKey.rawRepresentation.count == 32 // Data(base64URLEncoded: pkData.privateKey)?.count
-      print("isPrivateKey32Bytes: \(isPrivateKey32Bytes ? "✅" : "🚫")")
-      // #expect(isPrivateKey32Bytes) // Check the length of the private key (e.g., 32 bytes for P-256)
-      XCTAssertTrue(isPrivateKey32Bytes)
-      
-      // Attempt to generate a public key from the private key
-      let publicKey = privKey.publicKey // try? PKCrypto.generatePublicKey(from: Data(base64URLEncoded: pkData.privateKey) ?? Data())
-      Swift.print("publicKey.rawRepresentation.count:  \(publicKey.rawRepresentation.count)")
-      let isPublicKey64Bytes: Bool = publicKey.rawRepresentation.count == 64 // Data(base64URLEncoded: pkData.privateKey)?.count
-      print("isPublicKey64Bytes: \(isPublicKey64Bytes ? "✅" : "🚫")")
-      //      #expect(isPublicKey64Bytes)
-      XCTAssertTrue(isPublicKey64Bytes)
+       let pkData = PKData(
+           relyingParty: "example.com",
+           username: "alice",
+           userHandle: UUID().uuidString.data(using: .utf8)!
+       )
+
+       // Helper function to check data length and print result
+       func checkDataLength(_ data: Data, expectedLength: Int, description: String) {
+           let isExpectedLength = data.count == expectedLength
+           print("\(description): \(isExpectedLength ? "✅" : "🚫")")
+           XCTAssertTrue(isExpectedLength, "\(description) should be \(expectedLength) bytes")
+       }
+
+       // Check credentialID bytes length
+       if let credentialIDData = Data(base64URLEncoded: pkData.credentialID) {
+           checkDataLength(credentialIDData, expectedLength: 32, description: "CredentialID")
+       } else {
+           XCTFail("Failed to decode CredentialID")
+       }
+
+       // Check private key length
+       let privKey = try P256.Signing.PrivateKey(pemRepresentation: pkData.privateKey)
+       checkDataLength(privKey.rawRepresentation, expectedLength: 32, description: "Private Key")
+
+       // Generate public key from the private key and check length
+       let publicKey = privKey.publicKey
+       Swift.print("publicKey.rawRepresentation.count: \(publicKey.rawRepresentation.count)")
+       checkDataLength(publicKey.rawRepresentation, expectedLength: 64, description: "Public Key")
    }
    /**
     * Test Passkey Signature Validation
@@ -54,33 +60,83 @@ extension YourTestClassTests {
     */
    private static func testPasskeySignatureValidation() throws {
       // Swift.print("testPasskeyValidation")
-      let publicKey = Data(base64URLEncoded: "your-public-key-string")!
-      let signature = Data(base64URLEncoded: "your-received-signature-string")!
-      let challengeData = Data("your-challenge-string".utf8)
-      let isValid = try PKValidator.validateSignature(publicKeyData: publicKey, signature: signature, data: challengeData)
-      if isValid {
-         print("✅ Authentication successful.")
-      } else {
-         print("🚫 Authentication failed.")
+      
+      // Prepare test data
+      let publicKeyBase64URL = "your-public-key-string"
+      let signatureBase64URL = "your-received-signature-string"
+      let challengeString = "your-challenge-string"
+
+      // Decode base64URL encoded strings
+      guard let publicKeyData = Data(base64URLEncoded: publicKeyBase64URL) else {
+         XCTFail("Invalid public key base64URL string.")
+         return
       }
+      guard let signatureData = Data(base64URLEncoded: signatureBase64URL) else {
+         XCTFail("Invalid signature base64URL string.")
+         return
+      }
+      let challengeData = Data(challengeString.utf8)
+
+      // Validate signature
+      let isValid = try PKValidator.validateSignature(
+         publicKeyData: publicKeyData,
+         signature: signatureData,
+         data: challengeData
+      )
+
+      // Output the result
+      let resultMessage = isValid ? "✅ Authentication successful." : "🚫 Authentication failed."
+      print(resultMessage)
+
+      // Assert the result
       XCTAssertTrue(isValid)
    }
    /**
     * Test codable conversion
     */
    private static func testCodable() throws {
-      let pkData: PKData = .init(
+      // Initialize PKData
+      let pkData = PKData(
          relyingParty: "example.com",
          username: "alice",
          userHandle: UUID().uuidString.data(using: .utf8)!
       )
-      // Convert JSON Data to String
-      let jsonString: String = try pkData.getJsonString()
-      let newPkData: PKData = try .init(passKeyJsonString: jsonString)
-      let equals = newPkData == pkData
-      XCTAssertTrue(equals)
-      print("equals: \(equals ? "✅" : "🚫")")
+      // Serialize PKData to JSON string
+      let jsonString = try pkData.getJsonString()
+      // Deserialize JSON string back to PKData
+      let newPkData = try PKData(passKeyJsonString: jsonString)
+      // Verify that the original and deserialized PKData are equal
+      XCTAssertEqual(newPkData, pkData)
+      print("equals: \(newPkData == pkData ? "✅" : "🚫")")
    }
 }
+// Additional tests
+extension YourTestClassTests {
+   //  correctly validates a signature when provided with valid data.
+   func testValidateSignatureWithValidData() {
+      do {
+         // Generate a key pair using Ed25519
+         let privateKey = Curve25519.Signing.PrivateKey()
+         let publicKey = privateKey.publicKey
 
+         // Prepare data to sign
+         let dataToSign = "Test data".data(using: .utf8)!
+
+         // Sign the data
+         let signature = try privateKey.signature(for: dataToSign)
+
+         // Validate the signature using the raw representations
+         let isValid = try PKValidator.validateSignature(
+               publicKeyData: publicKey.rawRepresentation,
+               signature: signature,
+               data: dataToSign
+         )
+
+         // Assert that the signature is valid
+         XCTAssertTrue(isValid, "The signature should be valid.")
+      } catch {
+         XCTFail("Error during test: \(error)")
+      }
+   }
+}
 
