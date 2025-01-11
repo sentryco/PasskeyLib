@@ -76,9 +76,9 @@ extension PKData {
       )
    }
    // ⚠️️ DEPRECATED ⚠️️
-   @available(*, deprecated, renamed: "ASPasskeyCredentialIdentity.pkData")
-   public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
-      self = asPasskeyCredentialIdentity.pkData
-   }
+   // @available(*, deprecated, renamed: "ASPasskeyCredentialIdentity.pkData")
+   // public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
+   //    self = asPasskeyCredentialIdentity.pkData
+   // }
 }
 
