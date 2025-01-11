@@ -21,7 +21,7 @@ extension PKData {
     *   - privateKey: The private key associated with the credential.
     * - Returns: A `Data` object representing the attestation object.
     */
-   internal func getAttestationObject(publicKeySizeInBytes: Int = 64) -> Data {
+   internal func getAttestationObject(publicKeySizeInBytes: Int = 64) throws -> Data {
       var authData = Data()
       // Hash the relying party identifier to ensure privacy and integrity.
       let rpIdHash = CryptoKit.SHA256.hash(data: relyingParty.data(using: .utf8)!)
@@ -42,8 +42,9 @@ extension PKData {
       // Append the credential ID itself.
       authData.append(contentsOf: [UInt8](credentialIDData!))
       // Encode the public key using CBOR for interoperability.
-      let privKey = try! P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
-      let encodedPublicKey = CBOR.cborEncodePublicKey(privKey.publicKey, publicKeySizeInBytes: publicKeySizeInBytes)
+      // - Fixme: ⚠️️ throw error 
+      let privKey = try P256.Signing.PrivateKey.init(pemRepresentation: self.privateKey)
+      let encodedPublicKey = try CBOR.cborEncodePublicKey(privKey.publicKey, publicKeySizeInBytes: publicKeySizeInBytes)
       authData.append(contentsOf: encodedPublicKey)
       // Finally, encode the entire authentication data using CBOR to form the attestation object.
       let attestationObject = CBOR.cborEncodeAttestation(authData)

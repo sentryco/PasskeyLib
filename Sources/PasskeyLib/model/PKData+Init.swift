@@ -75,10 +75,5 @@ extension PKData {
          privateKey: privateKey.pemRepresentation
       )
    }
-   // ⚠️️ DEPRECATED ⚠️️
-   // @available(*, deprecated, renamed: "ASPasskeyCredentialIdentity.pkData")
-   // public init(asPasskeyCredentialIdentity: ASPasskeyCredentialIdentity) {
-   //    self = asPasskeyCredentialIdentity.pkData
-   // }
 }
 

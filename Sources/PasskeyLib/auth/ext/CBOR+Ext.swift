@@ -10,14 +10,14 @@ extension CBOR {
      * - Returns: A `Data` object containing the CBOR-encoded public key
      * - Throws: An error if the public key size does not match the expected size
      */
-   internal static func cborEncodePublicKey(_ publicKey: P256.Signing.PublicKey, publicKeySizeInBytes: Int) -> Data {
+   internal static func cborEncodePublicKey(_ publicKey: P256.Signing.PublicKey, publicKeySizeInBytes: Int) throws -> Data {
         let rawPublicKey = publicKey.rawRepresentation
         // Ensure the public key is of the expected size, otherwise log an error and fail the operation
         guard rawPublicKey.count == publicKeySizeInBytes else {
             print("Unexpected public key size: \(rawPublicKey.count)")
             print("Unexpected public key size")
-            assertionFailure("Public key size is incorrect.")
-            return Data()
+            throw NSError(domain: "Public key size is incorrect.", code: 0)
+//            return Data()
         }
         // Split the public key into 'x' and 'y' components for CBOR encoding
         let x = Array(rawPublicKey.prefix(upTo: 33))
