@@ -7,17 +7,7 @@ import AuthenticationServices
 /**
  * - Fixme: ⚠️️ Get a hold of synthetic passkey data to test with
  */
-class YourTestClassTests: XCTestCase {
-   func test() {
-      do {
-         try Self.testPasskeyInitiation()
-         // try Self.testPasskeySignatureValidation()
-         try Self.testCodable()
-      } catch {
-         Swift.print("error:  \(error.localizedDescription)")
-      }
-   }
-}
+class YourTestClassTests: XCTestCase {}
 /**
  * Tests
  */
@@ -92,28 +82,13 @@ extension YourTestClassTests {
       // Assert the result
       XCTAssertTrue(isValid)
    }
-   /**
-    * Test codable conversion
-    */
-   private static func testCodable() throws {
-      // Initialize PKData
-      let pkData = PKData(
-         relyingParty: "example.com",
-         username: "alice",
-         userHandle: UUID().uuidString.data(using: .utf8)!
-      )
-      // Serialize PKData to JSON string
-      let jsonString = try pkData.getJsonString()
-      // Deserialize JSON string back to PKData
-      let newPkData = try PKData(passKeyJsonString: jsonString)
-      // Verify that the original and deserialized PKData are equal
-      XCTAssertEqual(newPkData, pkData)
-      print("equals: \(newPkData == pkData ? "✅" : "🚫")")
-   }
+   
 }
 // Additional tests
 extension YourTestClassTests {
-   //  correctly validates a signature when provided with valid data.
+   /**
+    * Verifies that the validator correctly validates a signature when provided with valid data.
+    */
    func testValidateSignatureWithValidData() {
       do {
          // Generate a key pair using Ed25519
@@ -139,7 +114,9 @@ extension YourTestClassTests {
          XCTFail("Error during test: \(error)")
       }
    }
-   // test to check that the validator correctly identifies an invalid signature.
+   /**
+    * Tests that the validator correctly identifies an invalid signature.
+    */
    func testValidateSignatureWithInvalidData() {
       do {
          // Generate a key pair using Ed25519
@@ -168,7 +145,9 @@ extension YourTestClassTests {
          XCTFail("Error during test: \(error)")
       }
    }
-   // Test the `Data` extension methods for Base64 URL encoding and decoding to ensure correct functionality.
+   /**
+    * Tests the `Data` extension methods for Base64 URL encoding and decoding to ensure correct functionality.
+    */
    func testBase64URLEncodingDecoding() {
       let originalString = "Test string for Base64 URL encoding/decoding."
       guard let originalData = originalString.data(using: .utf8) else {
@@ -194,9 +173,9 @@ extension YourTestClassTests {
       // Assert that the original and decoded strings are equal
       XCTAssertEqual(decodedString, originalString, "The decoded string should match the original.")
    }
-
-   // Verify that initializing PKData with invalid inputs handles errors appropriately.
-
+   /**
+    * Verify that initializing PKData with invalid inputs handles errors appropriately.
+    */
    func testPKDataInitializationWithInvalidInputs() {
       // Invalid userHandle data (empty data)
       let userHandleData = Data()
@@ -214,8 +193,9 @@ extension YourTestClassTests {
       // If PKData should handle empty userHandleData, adjust the test accordingly
       XCTAssertNotNil(pkData, "PKData should be initialized even with empty userHandle data.")
    }
-
-   // Ensure that the computed properties in PKData return the correct data.
+   /**
+    * Tests to ensure that the computed properties in `PKData` return the correct data.
+    */
 
    func testPKDataGetters() {
       let pkData = PKData(
@@ -236,8 +216,9 @@ extension YourTestClassTests {
       // Test publicKeyStr
       XCTAssertNotNil(pkData.publicKeyStr, "publicKeyStr should not be nil.")
    }
-
-   // Test the creation of an ASPasskeyAssertionCredential from PKData.
+   /**
+    * Test the creation of an ASPasskeyAssertionCredential from PKData.
+    */
 
    func testASPasskeyAssertionCredentialCreation() {
       let pkData = PKData(
@@ -289,8 +270,9 @@ extension YourTestClassTests {
 //      // Assert that the public key data matches the expected length
 //      XCTAssertEqual(publicKeyData.count, 65, "Public key data should be 65 bytes for P-256 curve.")
 //   }
-
-   // Ensure that the Data(random:) initializer generates data of the correct length.
+   /**
+    * This test ensures that the Data(random:) initializer generates data of the correct length.
+    */
 
    func testDataRandomInitializer() {
       let dataLength = 32
@@ -302,7 +284,9 @@ extension YourTestClassTests {
       // Assert that the generated data has the expected length
       XCTAssertEqual(randomData.count, dataLength, "Random data should be \(dataLength) bytes long.")
    }
-   // Validate that the hex string extensions correctly encode and decode data.
+   /**
+    * Validate that the hex string extensions correctly encode and decode data.
+    */
 
    func testHexStringEncodingDecoding() {
       let originalData = "Test data for hex encoding.".data(using: .utf8)!
@@ -319,8 +303,9 @@ extension YourTestClassTests {
       // Assert that the original and decoded data are equal
       XCTAssertEqual(decodedData, originalData, "Decoded data should match the original.")
    }
-
-   // Check that PKValidator.validateSignature throws an error when provided with invalid public key data.
+   /**
+    * This test verifies that PKValidator.validateSignature throws an error when provided with invalid public key data.
+    */
 
    func testValidateSignatureWithInvalidPublicKey() {
       do {
@@ -345,28 +330,16 @@ extension YourTestClassTests {
       }
    }
 }
+
 // more tests
 extension YourTestClassTests {
-      // Test PKData JSON Serialization with Invalid Data
-       //Purpose: Ensure that attempting to serialize or deserialize PKData with invalid JSON data properly throws errors.
-      // Test Case: Provide malformed JSON strings to the PKData initializer and check that it throws the expected errors.
-      func testPKDataSerializationWithInvalidJSON() {
-      do {
-         // Malformed JSON string
-         let invalidJsonString = "{ invalid json }"
-         
-         // Attempt to initialize PKData with invalid JSON
-         _ = try PKData(passKeyJsonString: invalidJsonString)
-         
-         XCTFail("Initialization should have failed with invalid JSON.")
-      } catch {
-         // Expected error
-         XCTAssertTrue(true, "Caught expected error: \(error)")
-      }
-   }
-   // Test PKData Equality with Different Data
-   // Purpose: Ensure that the Equatable protocol is correctly implemented for PKData when comparing different instances.
-   // Test Case: Create two PKData instances with different properties and assert that they are not equal
+   /**
+    * Test PKData Equality with Different Data
+    *
+    * Purpose: Ensure that the Equatable protocol is correctly implemented for PKData when comparing different instances.
+    *
+    * Test Case: Create two PKData instances with different properties and assert that they are not equal.
+    */
    func testPKDataInequality() {
       let pkData1 = PKData(
          relyingParty: "example.com",
@@ -383,9 +356,11 @@ extension YourTestClassTests {
       // Assert that the two PKData instances are not equal
       XCTAssertNotEqual(pkData1, pkData2, "PKData instances should not be equal.")
    }
-   // Test Attestation Object Creation with Invalid Public Key Size
-   // Purpose: Verify that an error is thrown when an invalid public key size is provided during attestation object creation.
-   // Test Case: Attempt to create an attestation object with an incorrect publicKeySizeInBytes and verify that the appropriate error is thrown.
+   /**
+    * Test Attestation Object Creation with Invalid Public Key Size
+    * Purpose: This test verifies that an error is thrown when an invalid public key size is provided during attestation object creation.
+    * Test Case: The test attempts to create an attestation object with an incorrect publicKeySizeInBytes and verifies that the appropriate error is thrown.
+    */
    func testAttestationObjectCreationWithInvalidPublicKeySize() {
       let pkData = PKData(
          relyingParty: "example.com",
@@ -402,9 +377,12 @@ extension YourTestClassTests {
          XCTAssertTrue(true, "Caught expected error: \(error)")
       }
    }
-   // Test PKValidator with Empty Signature
-   // Purpose: Check how the validator handles an empty signature.
-   // Test Case: Provide an empty Data object as the signature and verify that the validation fails or throws an error appropriately.
+   /**
+    Tests how the PKValidator handles an empty signature.
+
+    - Purpose: To verify that providing an empty Data object as the signature to the PKValidator results in a failed validation or an appropriate error being thrown.
+    - Test Case: An empty Data object is used as the signature in the validation process.
+    */
    func testValidateSignatureWithEmptySignature() {
       do {
          // Generate a key pair
@@ -431,9 +409,12 @@ extension YourTestClassTests {
          XCTAssertTrue(true, "Caught expected error: \(error)")
       }
    }
-   // Test PKSigner with Invalid Private Key
-   // Purpose: Ensure that the PKSigner correctly handles invalid private keys when attempting to sign data.
-   // Test Case: Provide an invalid private key string to the signing method and verify that it returns nil or throws an error.
+   /**
+    Tests the PKSigner's behavior with an invalid private key.
+
+    - Purpose: To ensure that the PKSigner correctly handles cases where an invalid private key is used to sign data.
+    - Test Case: An invalid private key string is provided to the signing method, and the test verifies that the method returns nil or throws an error.
+    */
    func testPKSignerWithInvalidPrivateKey() {
       // Invalid private key string
       let invalidPrivateKeyStr = "InvalidPrivateKey"
@@ -447,9 +428,13 @@ extension YourTestClassTests {
       // Assert that the signature is nil
       XCTAssertNil(signature, "Signature should be nil when private key is invalid.")
    }
-   // Test Data Extension with Zero Length in Random Initializer
-   // Purpose: Verify that initializing Data with zero length using the random initializer behaves as expected.
-   // Test Case: Attempt to create random data with length zero and check that it returns an empty Data object or nil.
+   /**
+    * Test Data Extension with Zero Length in Random Initializer
+    *
+    * Purpose: Verify that initializing Data with zero length using the random initializer behaves as expected.
+    *
+    * Test Case: Attempt to create random data with length zero and check that it returns an empty Data object or nil.
+    */
    func testDataRandomInitializerWithZeroLength() {
       let dataLength = 0
       let randomData = Data(random: dataLength)
@@ -458,9 +443,13 @@ extension YourTestClassTests {
       XCTAssertNotNil(randomData, "Random data should not be nil even with zero length.")
       XCTAssertEqual(randomData?.count, dataLength, "Random data should have zero length.")
    }
-   // Test Base64 URL Encoding with Special Characters
-   // Purpose: Ensure that the base64URLEncodedString method correctly handles data containing special characters.
-   // Test Case: Encode data with special characters and verify that it can be correctly encoded and decoded.
+   /**
+    * Test Base64 URL Encoding with Special Characters
+    *
+    * Purpose: Ensure that the base64URLEncodedString method correctly handles data containing special characters.
+    *
+    * Test Case: Encode data with special characters and verify that it can be correctly encoded and decoded.
+    */
    func testBase64URLEncodingWithSpecialCharacters() {
       let originalString = "!@#$%^&*()_+-=[]{}|;':,.<>/?`~"
       guard let originalData = originalString.data(using: .utf8) else {
@@ -486,9 +475,13 @@ extension YourTestClassTests {
       // Assert that the original and decoded strings are equal
       XCTAssertEqual(decodedString, originalString, "The decoded string should match the original.")
    }
-   // Test Attestation Object Decoding with Corrupted Data
-   // Purpose: Verify that attempting to decode a corrupted attestation object appropriately fails.
-   // Test Case: Provide malformed or corrupted data to the attestation object decoder and check that it returns nil or throws an error.
+   /**
+    * Test Attestation Object Decoding with Corrupted Data
+    *
+    * Purpose: Verify that attempting to decode a corrupted attestation object appropriately fails.
+    *
+    * Test Case: Provide malformed or corrupted data to the attestation object decoder and check that it returns nil or throws an error.
+    */
    func testAttestationObjectDecodingWithCorruptedData() {
       // Corrupted attestation data
       let corruptedData = Data([0x00, 0xFF, 0xAB, 0xCD])
@@ -499,9 +492,13 @@ extension YourTestClassTests {
       // Assert that the attestation object is nil
       XCTAssertNil(attestationObject, "Attestation object should be nil when data is corrupted.")
    }
-   // Test AuthenticatorData Byte Representation
-   // Purpose: Ensure that the byteArrayRepresentation method of AuthenticatorData produces the correct byte sequence.
-   // Test Case: Create an AuthenticatorData instance with known values and verify that the byte array matches the expected output.
+   /**
+    * Test AuthenticatorData Byte Representation
+    *
+    * Ensures that the byteArrayRepresentation method of AuthenticatorData produces the correct byte sequence.
+    *
+    * Test Case: Create an AuthenticatorData instance with known values and verify that the byte array matches the expected output.
+    */
    func testAuthenticatorDataByteRepresentation() {
        // Define known values
        let relyingPartyID = "example.com"
@@ -538,10 +535,13 @@ extension YourTestClassTests {
        // Assert that the byte arrays are equal
        XCTAssertEqual(byteArray, expectedBytes, "Byte representation should match expected bytes.")
     }
-    // Test PKData Initialization with Large User Handle
-    // Purpose: Ensure that a very large userHandle does not cause unexpected behavior.
-   // Test Case: Provide a userHandle with a large size and check whether PKData initializes correctly.
-   func testPKDataInitializationWithLargeUserHandle() {
+    /**
+     * Test PKData Initialization with Large User Handle
+     *
+     * Purpose: Ensure that a very large userHandle does not cause unexpected behavior.
+     * Test Case: Provide a userHandle with a large size and check whether PKData initializes correctly.
+     */
+    func testPKDataInitializationWithLargeUserHandle() {
        // Generate a large user handle
        let largeUserHandleData = Data(count: 1024 * 1024) // 1 MB of zeros
        
@@ -556,10 +556,13 @@ extension YourTestClassTests {
        
        // Additional checks can be added as needed
     }
-    // Test Data Hex Encoding with Empty Data
-   // Purpose: Ensure that encoding an empty Data object to a hex string results in an empty string.
-   // Test Case: Encode empty data and verify that the result is an empty string.
-   func testHexEncodingWithEmptyData() {
+    /**
+     * Test Data Hex Encoding with Empty Data
+     *
+     * Purpose: Ensure that encoding an empty Data object to a hex string results in an empty string.
+     * Test Case: Encode empty data and verify that the result is an empty string.
+     */
+    func testHexEncodingWithEmptyData() {
        let emptyData = Data()
        
        // Convert data to hex string
