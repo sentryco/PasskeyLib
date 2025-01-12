@@ -16,26 +16,8 @@ extension PKValidator {
     *           error occurs during the signature verification process.
     */
    public static func validateSignature(publicKeyData: Data, signature: Data, data: Data) throws -> Bool {
-
-      // do {
-      //    // Convert the raw public key data into a usable public key
-      //    let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
-      //    // Verify the signature
-      //    if publicKey.isValidSignature(signature, for: data) {
-      //       print("The signature is valid.")
-      //       return true
-      //    } else {
-      //       print("The signature is invalid.")
-      //       return false
-      //    }
-      // } catch {
-      //    print("An error occurred while creating the public key or verifying the signature: \(error)")
-      //    throw error
-      // }
-
        // Convert the raw public key data into a usable public key
        let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
-       
        // Verify the signature
        return publicKey.isValidSignature(signature, for: data)
    }
@@ -62,3 +44,18 @@ extension P256.Signing.PublicKey {
       return self.isValidSignature(cryptoSignature, for: data)
    }
 }
+// do {
+//    // Convert the raw public key data into a usable public key
+//    let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
+//    // Verify the signature
+//    if publicKey.isValidSignature(signature, for: data) {
+//       print("The signature is valid.")
+//       return true
+//    } else {
+//       print("The signature is invalid.")
+//       return false
+//    }
+// } catch {
+//    print("An error occurred while creating the public key or verifying the signature: \(error)")
+//    throw error
+// }

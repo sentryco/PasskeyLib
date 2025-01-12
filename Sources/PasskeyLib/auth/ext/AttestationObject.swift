@@ -18,34 +18,46 @@ struct AttestationObject {
     * - Description: Initializes an `AttestationObject` from a CBOR data structure.
     * - Returns: An optional `AttestationObject` if the CBOR data structure is valid, otherwise `nil`.
     * - Parameter cborData: The CBOR data structure to decode.
+    * fixme: make this throw
     */
    init?(from cborData: CBOR?) {
-      guard
-         let cborData = cborData,
-         case let CBOR.map(cborMap) = cborData,
-         // Extract "fmt" field
-         let fmtCBOR = cborMap[CBOR(stringLiteral: "fmt")],
-         case let CBOR.utf8String(fmt) = fmtCBOR,
-         // Extract "attStmt" field
-         let attStmtCBOR = cborMap[CBOR(stringLiteral: "attStmt")],
-         case let CBOR.map(attStmt) = attStmtCBOR,
-         // Extract "authData" field
-         let authDataCBOR = cborMap[CBOR(stringLiteral: "authData")],
-         case let CBOR.byteString(authDataBytes) = authDataCBOR
-      else {
-         return nil
-      }
-      // Assign the extracted format string to the format property
-      self.format = fmt
-      // Assign the extracted attestation statement map to the attestationStatement property
-      self.attestationStatement = attStmt
-      // Initialize the authData property with the extracted authenticator data bytes
-      do {
-         self.authData = try AuthenticatorData(data: Data(authDataBytes))
-      } catch {
-         Swift.print("error:  \(error)")
-         return nil
-      }
+       guard let cborData = cborData else {
+           return nil
+       }
+       guard case let CBOR.map(cborMap) = cborData else {
+           return nil
+       }
+
+       // Extract "fmt" field
+       guard let fmtCBOR = cborMap[CBOR(stringLiteral: "fmt")],
+             case let CBOR.utf8String(fmt) = fmtCBOR else {
+           return nil
+       }
+
+       // Extract "attStmt" field
+       guard let attStmtCBOR = cborMap[CBOR(stringLiteral: "attStmt")],
+             case let CBOR.map(attStmt) = attStmtCBOR else {
+           return nil
+       }
+
+       // Extract "authData" field
+       guard let authDataCBOR = cborMap[CBOR(stringLiteral: "authData")],
+             case let CBOR.byteString(authDataBytes) = authDataCBOR else {
+           return nil
+       }
+
+       // Assign the extracted format string to the format property
+       self.format = fmt
+       // Assign the extracted attestation statement map to the attestationStatement property
+       self.attestationStatement = attStmt
+
+       // Initialize the authData property with the extracted authenticator data bytes
+       do {
+           self.authData = try AuthenticatorData(data: Data(authDataBytes))
+       } catch {
+           Swift.print("error: \(error)")
+           return nil
+       }
    }
 }
 /**

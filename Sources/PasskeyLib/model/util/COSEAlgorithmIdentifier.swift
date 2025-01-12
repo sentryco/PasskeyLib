@@ -4,7 +4,7 @@ import Foundation
  * - Description: This enumeration defines the COSE (CBOR Object Signing and Encryption) algorithm identifiers for various elliptic curve signature algorithms.
  * - Note: The raw values of the cases correspond to the COSE algorithm identifier values.
  */
-public enum COSEAlgorithmIdentifier: Int, RawRepresentable, Codable, CaseIterable {
+public enum COSEAlgorithmIdentifier: Int, Codable, CaseIterable {
    case es256 = -7
    case es384 = -35
    case es512 = -36

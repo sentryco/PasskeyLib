@@ -17,7 +17,7 @@ extension CBOR {
             print("Unexpected public key size: \(rawPublicKey.count)")
             print("Unexpected public key size")
             throw NSError(domain: "Public key size is incorrect.", code: 0)
-//            return Data()
+            // return Data()
         }
         // Split the public key into 'x' and 'y' components for CBOR encoding
         let x = Array(rawPublicKey.prefix(upTo: 33))

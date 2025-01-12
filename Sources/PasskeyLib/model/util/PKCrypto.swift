@@ -9,7 +9,6 @@ class PKCrypto {
     * - Returns: The generated public key as a `SecKey` object.
     */
    static func generatePublicKey(from privateKeyData: Data) throws -> SecKey {
-      var error: Unmanaged<CFError>?
       // Attributes for the private key
       let privateKeyAttributes: [String: Any] = [
          kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
@@ -17,13 +16,18 @@ class PKCrypto {
          kSecAttrKeySizeInBits as String: 256,
          kSecAttrIsPermanent as String: false
       ]
+      var error: Unmanaged<CFError>?
       // Create the private key from data
       guard let privateKey = SecKeyCreateWithData(privateKeyData as CFData, privateKeyAttributes as CFDictionary, &error) else {
-         throw error!.takeRetainedValue() as Error
+          if let error = error?.takeRetainedValue() {
+              throw error as Error
+          } else {
+              throw NSError(domain: NSOSStatusErrorDomain, code: Int(errSecParam), userInfo: nil)
+          }
       }
       // Extract the public key from the private key
       guard let publicKey = SecKeyCopyPublicKey(privateKey) else {
-         throw NSError(domain: NSOSStatusErrorDomain, code: 0/*errSecInvalidKey*/, userInfo: nil)
+          throw NSError(domain: NSOSStatusErrorDomain, code: 0 /*Int(errSecInvalidKey)*/, userInfo: nil)
       }
       return publicKey
    }

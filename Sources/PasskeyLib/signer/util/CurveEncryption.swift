@@ -13,20 +13,19 @@ private let pemFooter = "-----END PRIVATE KEY-----"
  * - Note: This constant defines the expected length of a raw private key for Curve25519.
  */
 private let rawPrivateKeySize = 32
-/**
- * ASN.1 prefix for Curve25519 private key to ensure the data is correctly formatted.
- * - Description: This prefix is used to validate and correctly format the ASN.1 data for a Curve25519 private key.
- * - Note: The prefix ensures that the private key data adheres to the expected structure for Curve25519 keys.
- */
-private let privateKeyASN1Prefix = Data(
-    // swiftlint:disable collection_alignment
-    [0x30, 0x2E,
-        0x02, 0x01, 0x00,
-        0x30, 0x05,
-            0x06, 0x03,
-                0x2B, 0x65, 0x70,
-        0x04, 0x22,
-            0x04, 0x20
+    /**
+     * ASN.1 prefix for Curve25519 private key to ensure the data is correctly formatted.
+     * - Description: This prefix is used to validate and correctly format the ASN.1 data for a Curve25519 private key.
+     * - Note: The prefix ensures that the private key data adheres to the expected structure for Curve25519 keys.
+     */
+    private let privateKeyASN1Prefix = Data([
+        0x30, 0x2E,                // SEQUENCE (length 46)
+        0x02, 0x01, 0x00,          // INTEGER (version 0)
+        0x30, 0x05,                // SEQUENCE (length 5)
+        0x06, 0x03,                // OBJECT IDENTIFIER (length 3)
+        0x2B, 0x65, 0x70,          // OID 1.3.101.112 (id-Ed25519)
+        0x04, 0x22,                // OCTET STRING (length 34)
+        0x04, 0x20                 // OCTET STRING (length 32) - the private key bytes follow
     ])
     // swiftlint:enable collection_alignment
 
