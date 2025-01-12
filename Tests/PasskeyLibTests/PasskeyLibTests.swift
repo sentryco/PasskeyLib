@@ -3,6 +3,7 @@ import XCTest
 import CryptoKit
 import Foundation
 @testable import PasskeyLib
+import AuthenticationServices
 /**
  * - Fixme: ⚠️️ Get a hold of synthetic passkey data to test with
  */
@@ -344,4 +345,227 @@ extension YourTestClassTests {
       }
    }
 }
+// more tests
+extension YourTestClassTests {
+      // Test PKData JSON Serialization with Invalid Data
+       //Purpose: Ensure that attempting to serialize or deserialize PKData with invalid JSON data properly throws errors.
+      // Test Case: Provide malformed JSON strings to the PKData initializer and check that it throws the expected errors.
+      func testPKDataSerializationWithInvalidJSON() {
+      do {
+         // Malformed JSON string
+         let invalidJsonString = "{ invalid json }"
+         
+         // Attempt to initialize PKData with invalid JSON
+         _ = try PKData(passKeyJsonString: invalidJsonString)
+         
+         XCTFail("Initialization should have failed with invalid JSON.")
+      } catch {
+         // Expected error
+         XCTAssertTrue(true, "Caught expected error: \(error)")
+      }
+   }
+   // Test PKData Equality with Different Data
+   // Purpose: Ensure that the Equatable protocol is correctly implemented for PKData when comparing different instances.
+   // Test Case: Create two PKData instances with different properties and assert that they are not equal
+   func testPKDataInequality() {
+      let pkData1 = PKData(
+         relyingParty: "example.com",
+         username: "alice",
+         userHandle: UUID().uuidString.data(using: .utf8)!
+      )
+      
+      let pkData2 = PKData(
+         relyingParty: "example.org",
+         username: "bob",
+         userHandle: UUID().uuidString.data(using: .utf8)!
+      )
+      
+      // Assert that the two PKData instances are not equal
+      XCTAssertNotEqual(pkData1, pkData2, "PKData instances should not be equal.")
+   }
+   // Test Attestation Object Creation with Invalid Public Key Size
+   // Purpose: Verify that an error is thrown when an invalid public key size is provided during attestation object creation.
+   // Test Case: Attempt to create an attestation object with an incorrect publicKeySizeInBytes and verify that the appropriate error is thrown.
+   func testAttestationObjectCreationWithInvalidPublicKeySize() {
+      let pkData = PKData(
+         relyingParty: "example.com",
+         username: "testUser",
+         userHandle: UUID().uuidString.data(using: .utf8)!
+      )
+      
+      do {
+         // Attempt to create attestation object with invalid public key size
+         let _ = try pkData.getAttestationObject(publicKeySizeInBytes: 100)
+         XCTFail("Expected an error due to invalid public key size, but creation succeeded.")
+      } catch {
+         // Expected error
+         XCTAssertTrue(true, "Caught expected error: \(error)")
+      }
+   }
+   // Test PKValidator with Empty Signature
+   // Purpose: Check how the validator handles an empty signature.
+   // Test Case: Provide an empty Data object as the signature and verify that the validation fails or throws an error appropriately.
+   func testValidateSignatureWithEmptySignature() {
+      do {
+         // Generate a key pair
+         let privateKey = P256.Signing.PrivateKey()
+         let publicKey = privateKey.publicKey
+         
+         // Prepare data to sign
+         let dataToSign = "Test data".data(using: .utf8)!
+         
+         // Use an empty signature
+         let signature = Data()
+         
+         // Attempt to validate signature
+         let isValid = try PKValidator.validateSignature(
+            publicKeyData: publicKey.rawRepresentation,
+            signature: signature,
+            data: dataToSign
+         )
+         
+         // Validation should fail
+         XCTAssertFalse(isValid, "Validation should fail with empty signature.")
+      } catch {
+         // Expected error
+         XCTAssertTrue(true, "Caught expected error: \(error)")
+      }
+   }
+   // Test PKSigner with Invalid Private Key
+   // Purpose: Ensure that the PKSigner correctly handles invalid private keys when attempting to sign data.
+   // Test Case: Provide an invalid private key string to the signing method and verify that it returns nil or throws an error.
+   func testPKSignerWithInvalidPrivateKey() {
+      // Invalid private key string
+      let invalidPrivateKeyStr = "InvalidPrivateKey"
+      
+      // Data to sign
+      let dataToSign = "Test data".data(using: .utf8)!
+      
+      // Attempt to sign data with an invalid private key
+      let signature = PKSigner.signWithPrivateKey(dataToSign, privateKeyStr: invalidPrivateKeyStr)
+      
+      // Assert that the signature is nil
+      XCTAssertNil(signature, "Signature should be nil when private key is invalid.")
+   }
+   // Test Data Extension with Zero Length in Random Initializer
+   // Purpose: Verify that initializing Data with zero length using the random initializer behaves as expected.
+   // Test Case: Attempt to create random data with length zero and check that it returns an empty Data object or nil.
+   func testDataRandomInitializerWithZeroLength() {
+      let dataLength = 0
+      let randomData = Data(random: dataLength)
+      
+      // Assert that the returned Data is not nil and has zero count
+      XCTAssertNotNil(randomData, "Random data should not be nil even with zero length.")
+      XCTAssertEqual(randomData?.count, dataLength, "Random data should have zero length.")
+   }
+   // Test Base64 URL Encoding with Special Characters
+   // Purpose: Ensure that the base64URLEncodedString method correctly handles data containing special characters.
+   // Test Case: Encode data with special characters and verify that it can be correctly encoded and decoded.
+   func testBase64URLEncodingWithSpecialCharacters() {
+      let originalString = "!@#$%^&*()_+-=[]{}|;':,.<>/?`~"
+      guard let originalData = originalString.data(using: .utf8) else {
+         XCTFail("Failed to convert string to data.")
+         return
+      }
+      
+      // Encode to Base64 URL
+      let base64URLString = originalData.base64URLEncodedString()
+      
+      // Decode back to Data
+      guard let decodedData = Data(base64URLEncoded: base64URLString) else {
+         XCTFail("Failed to decode Base64 URL string.")
+         return
+      }
+      
+      // Convert back to String
+      guard let decodedString = String(data: decodedData, encoding: .utf8) else {
+         XCTFail("Failed to convert data to string.")
+         return
+      }
+      
+      // Assert that the original and decoded strings are equal
+      XCTAssertEqual(decodedString, originalString, "The decoded string should match the original.")
+   }
+   // Test Attestation Object Decoding with Corrupted Data
+   // Purpose: Verify that attempting to decode a corrupted attestation object appropriately fails.
+   // Test Case: Provide malformed or corrupted data to the attestation object decoder and check that it returns nil or throws an error.
+   func testAttestationObjectDecodingWithCorruptedData() {
+      // Corrupted attestation data
+      let corruptedData = Data([0x00, 0xFF, 0xAB, 0xCD])
+      
+      // Attempt to decode the attestation object
+      let attestationObject = decodeAttestationObject(corruptedData)
+      
+      // Assert that the attestation object is nil
+      XCTAssertNil(attestationObject, "Attestation object should be nil when data is corrupted.")
+   }
+   // Test AuthenticatorData Byte Representation
+   // Purpose: Ensure that the byteArrayRepresentation method of AuthenticatorData produces the correct byte sequence.
+   // Test Case: Create an AuthenticatorData instance with known values and verify that the byte array matches the expected output.
+   func testAuthenticatorDataByteRepresentation() {
+       // Define known values
+       let relyingPartyID = "example.com"
+       let flags: AuthenticatorFlags = [.userPresent, .userVerified]
+       let counter: UInt32 = 42
 
+       // Create AuthenticatorData instance without attestedData and extData
+       let authData = AuthenticatorData(
+          relyingPartyID: relyingPartyID,
+          flags: flags,
+          counter: counter,
+          attestedData: nil,
+          extData: nil
+       )
+
+       // Get byte representation
+       let byteArray = authData.byteArrayRepresentation()
+
+       // Expected byte array (construct manually or based on known correct values)
+       var expectedBytes = [UInt8]()
+
+       // rpIdHash (SHA256 hash of relyingPartyID)
+       let rpIdHashData = Data(SHA256.hash(data: relyingPartyID.data(using: .utf8)!))
+       expectedBytes += rpIdHashData
+
+       // Flags byte
+       expectedBytes.append(flags.rawValue)
+
+       // Counter (big-endian)
+       var counterBE = counter.bigEndian
+       let counterBytes = withUnsafeBytes(of: &counterBE) { Array($0) }
+       expectedBytes += counterBytes
+
+       // Assert that the byte arrays are equal
+       XCTAssertEqual(byteArray, expectedBytes, "Byte representation should match expected bytes.")
+    }
+    // Test PKData Initialization with Large User Handle
+    // Purpose: Ensure that a very large userHandle does not cause unexpected behavior.
+   // Test Case: Provide a userHandle with a large size and check whether PKData initializes correctly.
+   func testPKDataInitializationWithLargeUserHandle() {
+       // Generate a large user handle
+       let largeUserHandleData = Data(count: 1024 * 1024) // 1 MB of zeros
+       
+       let pkData = PKData(
+          relyingParty: "example.com",
+          username: "alice",
+          userHandle: largeUserHandleData
+       )
+       
+       // Assert that PKData is initialized
+       XCTAssertNotNil(pkData, "PKData should be initialized with large userHandle.")
+       
+       // Additional checks can be added as needed
+    }
+    // Test Data Hex Encoding with Empty Data
+   // Purpose: Ensure that encoding an empty Data object to a hex string results in an empty string.
+   // Test Case: Encode empty data and verify that the result is an empty string.
+   func testHexEncodingWithEmptyData() {
+       let emptyData = Data()
+       
+       // Convert data to hex string
+       let hexString = emptyData.toHexString()
+       
+       // Assert that the hex string is empty
+       XCTAssertTrue(hexString.isEmpty, "Hex string should be empty for empty data.")
+    }
+}
