@@ -24,13 +24,26 @@ This example demonstrates initializing a challenge and signing it using a privat
 ```swift
 import PasskeyLib
 
-let challengeData = Data("your-challenge-string".utf8)
-let privateKey = "your-private-key-string"
-let signature = PKSigner.signWithPrivateKey(challengeData, privateKey: privateKey)
+// Example challenge data that needs to be signed
+let challengeString = "your-challenge-string"
+guard let challengeData = challengeString.data(using: .utf8) else {
+    print("Failed to convert the challenge string to Data.")
+    return
+}
 
-if let signature = signature {
+// Retrieve or generate your private key in PEM format.
+// In a real application, you would securely retrieve the stored private key for the user.
+// For this example, we'll generate a new private key.
+let privateKey = P256.Signing.PrivateKey()
+let privateKeyPEM = privateKey.pemRepresentation
+
+// Sign the challenge data using the private key
+if let signature = PKSigner.signWithPrivateKey(challengeData, privateKey: privateKeyPEM) {
+    // Signature generated successfully
+    // The signature can now be sent to the server for verification
     print("Signature: \(signature.base64URLEncodedString())")
 } else {
+    // Failed to generate the signature
     print("Failed to generate signature.")
 }
 ``` 
@@ -42,10 +55,19 @@ This snippet shows how to verify a signature using the `PKValidator` class. It c
 ```swift 
 import PasskeyLib
 
+// Replace with your actual base64-encoded public key string
 let publicKey = "your-public-key-string"
-let signature = Data(base64URLEncoded: "your-received-signature-string")!
+
+// Replace with the base64URL-encoded signature you received
+guard let signature = Data(base64URLEncoded: "your-received-signature-string") else {
+    print("Invalid signature data.")
+    return
+}
+
+// The challenge data that was originally sent to the client
 let challengeData = Data("your-challenge-string".utf8)
 
+// Verify the signature
 let isValid = PKValidator.verifySignature(signature, publicKey: publicKey, challenge: challengeData)
 
 if isValid {
@@ -58,14 +80,54 @@ if isValid {
 Creating an Assertion Credential (ASPasskeyAssertionCredential)
 
 ```swift
-let clientDataHash: Data = /* your client data hash */
-let privateKeyStr: String = /* your private key string */
-if let credential = getAssertionCredential(clientDataHash: clientDataHash, privateKeyStr: privateKeyStr) {
-    // Use the credential as needed
-} else {
-    print("Failed to create assertion credential")
+import PasskeyLib
+
+// Prepare your client data hash (e.g., SHA256 hash of your client data)
+let clientDataJSON = "{\"challenge\":\"your-challenge-value\"}".data(using: .utf8)!
+let clientDataHash = SHA256.hash(data: clientDataJSON)
+
+// Initialize your PKData instance with your passkey details
+let pkData = PKData(
+    credentialID: "your-credential-id-base64url",
+    relyingParty: "example.com",
+    username: "user@example.com",
+    userHandle: "your-user-handle-base64url",
+    privateKey: "your-private-key-string"
+)
+
+do {
+    // Generate the assertion credential
+    let assertionCredential = try pkData.getAssertionCredential(clientDataHash: clientDataHash)
+    // Use the assertionCredential as needed, e.g., send it to your server
+} catch {
+    print("Failed to create assertion credential: \(error)")
 }
 ```
+
+### JSON Format:
+
+Below is an example of a `PKData` object represented in JSON format. Note that some fields are base64-encoded to represent binary data.
+
+```json
+{
+    "credentialID": "Y3JlZGVudGlhbC1pZC1leGFtcGxl",
+    "relyingParty": "securebank.com",
+    "username": "john.doe",
+    "userHandle": "dXNlci1oYW5kbGUtc2FtcGxl",
+    "privateKey": "cHJpdmF0ZS1rZXktZXhhbXBsZQ=="
+}
+```
+
+**Explanation:**
+
+- `credentialID`: Base64-encoded string of `"credential-id-example"`.
+- `relyingParty`: The domain of the relying party, e.g., `"securebank.com"`.
+- `username`: The username associated with the passkey, e.g., `"john.doe"`.
+- `userHandle`: Base64-encoded string of `"user-handle-sample"`.
+- `privateKey`: Base64-encoded string of `"private-key-example"`.
+
+**Note:** When parsing this JSON, remember to decode the base64-encoded fields (`credentialID`, `userHandle`, `privateKey`) to obtain the original binary data.
+
 
 ### Config:
 
@@ -115,4 +177,5 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 
 ### Todo: 
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.
-- Write unit tests based on the codebase. Use AI to suggest areas that are testable and write test code etc
+- Investigate if we can broadcast receipt from another device. If that works, we could build in passkey support for chrome. by scanning the qr in chrome. and then broadcasting from iPhone etc.
+- Write unit tests based on the codebase. Use AI to suggest areas that are testable and write test code etc ✅
