@@ -3,26 +3,32 @@
 
 # PasskeyLib
 
-> Simplifies passkey storage and validation
+> Simplifies passkey storage and validation in Swift.
 
-### Features: 
-- 🔑 Passkey data-object for storing passkey data
-- 🔏 Passkey signing / validation / assertion / verification
+## Features
 
-### Instalation: 
-Swift package manager: 
+- 🔑 **Passkey Data Object**: Easily store passkey data.
+- 🔏 **Passkey Signing and Verification**: Sign, validate, assert, and verify passkeys with simple APIs.
+
+## Installation
+
+Add **PasskeyLib** to your project using Swift Package Manager:
+
 ```swift
-.package(url: "https://github.com/sentryco/PasskeyLib", branch: "main")
+dependencies: [
+    .package(url: "https://github.com/sentryco/PasskeyLib", from: "1.0.0")
+]
 ```
 
-### Example Usage:
+## Usage Examples
 
-To generate a new passkey, you would typically interact with the `PKSigner` class to create a signature using a private key. Here's how you can use the `PKSigner` class to sign a challenge:
+### Generating a New Passkey
 
-This example demonstrates initializing a challenge and signing it using a private key. The resulting signature is then printed in a base64 encoded string format. 
+Interact with the `PKSigner` class to create a signature using a private key.
 
 ```swift
 import PasskeyLib
+import CryptoKit
 
 // Example challenge data that needs to be signed
 let challengeString = "your-challenge-string"
@@ -31,9 +37,8 @@ guard let challengeData = challengeString.data(using: .utf8) else {
     return
 }
 
-// Retrieve or generate your private key in PEM format.
-// In a real application, you would securely retrieve the stored private key for the user.
-// For this example, we'll generate a new private key.
+// Retrieve or generate your private key
+// For this example, we'll generate a new private key
 let privateKey = P256.Signing.PrivateKey()
 let privateKeyPEM = privateKey.pemRepresentation
 
@@ -46,13 +51,13 @@ if let signature = PKSigner.signWithPrivateKey(challengeData, privateKey: privat
     // Failed to generate the signature
     print("Failed to generate signature.")
 }
-``` 
+```
 
-Verifying a Passkey After a passkey is generated and used in an authentication attempt, the server needs to verify the signature against the stored public key. This step ensures that the signature was created by the authenticator possessing the corresponding private key. 
+### Verifying a Passkey
 
-This snippet shows how to verify a signature using the `PKValidator` class. It checks if the signature received from the client matches the one generated using the stored public key. 
+The server can verify the signature against the stored public key using the `PKValidator` class.
 
-```swift 
+```swift
 import PasskeyLib
 
 // Replace with your actual base64-encoded public key string
@@ -75,12 +80,15 @@ if isValid {
 } else {
     print("Authentication failed.")
 }
-``` 
+```
 
-Creating an Assertion Credential (ASPasskeyAssertionCredential)
+### Creating an Assertion Credential
+
+Generate an assertion credential using the `PKData` object.
 
 ```swift
 import PasskeyLib
+import CryptoKit
 
 // Prepare your client data hash (e.g., SHA256 hash of your client data)
 let clientDataJSON = "{\"challenge\":\"your-challenge-value\"}".data(using: .utf8)!
@@ -104,7 +112,7 @@ do {
 }
 ```
 
-### JSON Format:
+## PKData JSON Structure
 
 Below is an example of a `PKData` object represented in JSON format. Note that some fields are base64-encoded to represent binary data.
 
@@ -122,42 +130,51 @@ Below is an example of a `PKData` object represented in JSON format. Note that s
 
 - `credentialID`: Base64-encoded string of `"credential-id-example"`.
 - `relyingParty`: The domain of the relying party, e.g., `"securebank.com"`.
-- `username`: The username associated with the passkey, e.g., `"john.doe"`.
+- `username`: The username associated with the passkey.
 - `userHandle`: Base64-encoded string of `"user-handle-sample"`.
 - `privateKey`: Base64-encoded string of `"private-key-example"`.
 
-**Note:** When parsing this JSON, remember to decode the base64-encoded fields (`credentialID`, `userHandle`, `privateKey`) to obtain the original binary data.
+**Note:** When parsing this JSON, remember to decode the base64-encoded fields (`credentialID`, `userHandle`, `privateKey`) to obtain the original data.
 
+## Configuration
 
-### Config:
+Set the following in your extension's `Info.plist`:
 
-Make sure to set the following in your extension's Info.plist:
-`<key>ProvidesPasskeys</key><true/>`
+```xml
+<key>ProvidesPasskeys</key>
+<true/>
+```
 
-In the CredentialProvider / AutoFill extension:
+In the Credential Provider / AutoFill extension:
 
-`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES`  
-`Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasswords = YES`
+```xml
+Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasskeys = YES
+Info.plist > NSExtension > NSExtensionAttributes > ASCredentialProviderExtensionCapabilities > ProvidesPasswords = YES
+```
 
-**Implement passkey support in AutoFill extension:**  
-To support passkeys, implement the following method in your CredentialProviderViewController:
-swift
+**Implement passkey support in AutoFill extension:**
+
+To support passkeys, implement the following methods in your `CredentialProviderViewController`:
 
 ```swift
 override func prepareInterface(forPasskeyRegistration registrationRequest: ASCredentialRequest) {
     // Handle passkey registration
 }
+
 override func prepareInterface(forPasskeyAssertion assertionRequest: ASCredentialRequest) {
     // Handle passkey assertion
 }
+
 override func prepareCredentialList(for serviceIdentifiers: [ASCredentialServiceIdentifier]) {
-    // Handle the preparation of the credential list for the given service identifiers
+    // Handle the preparation of the credential list
 }
+
 override func provideCredentialWithoutUserInteraction(for credentialIdentity: ASPasswordCredentialIdentity) {
-    // Handle providing a credential without user interaction for the given credential identity
+    // Provide a credential without user interaction
 }
+
 override func prepareInterface(forExtensionConfiguration configuration: ASCredentialProviderExtensionConfiguration) {
-    // Handle the preparation of the interface for the given extension configuration
+    // Handle the preparation of the interface for the extension configuration
 }
 ```
 
