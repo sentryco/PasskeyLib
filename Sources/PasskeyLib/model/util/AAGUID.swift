@@ -17,9 +17,6 @@ extension AAGUID {
     * - Returns: An array of 16 zero bytes representing the default AAGUID.
     */
    public static var defaultAAGUID: AAGUID {
-      return [
-         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-         0x00,
-      ]
+      return [UInt8](repeating: 0x00, count: 16)
    }
 }

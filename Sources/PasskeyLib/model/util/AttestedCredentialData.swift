@@ -32,7 +32,9 @@ extension AttestedCredentialData {
    func bytesRepresentation() -> [UInt8] {
       var result = [UInt8]()
       result += aaguid
-      result += credentialID.count.uint8Array().suffix(2)
+      let credentialIDLength = UInt16(credentialID.count).bigEndian
+      let credentialIDLengthBytes = withUnsafeBytes(of: credentialIDLength) { Array($0) }
+      result += credentialIDLengthBytes
       result += credentialID
       result += publicKey
       return result

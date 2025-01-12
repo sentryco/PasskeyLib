@@ -45,4 +45,6 @@ enum AuthDataFlags {
     * - Description: Indicates that extension data is included in the authenticator data.
     */
    static let ed: UInt8   = 0x80
+
+   
 }

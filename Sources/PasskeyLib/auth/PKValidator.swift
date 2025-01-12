@@ -16,21 +16,28 @@ extension PKValidator {
     *           error occurs during the signature verification process.
     */
    public static func validateSignature(publicKeyData: Data, signature: Data, data: Data) throws -> Bool {
-      do {
-         // Convert the raw public key data into a usable public key
-         let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
-         // Verify the signature
-         if publicKey.isValidSignature(signature, for: data) {
-            print("The signature is valid.")
-            return true
-         } else {
-            print("The signature is invalid.")
-            return false
-         }
-      } catch {
-         print("An error occurred while creating the public key or verifying the signature: \(error)")
-         throw error
-      }
+
+      // do {
+      //    // Convert the raw public key data into a usable public key
+      //    let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
+      //    // Verify the signature
+      //    if publicKey.isValidSignature(signature, for: data) {
+      //       print("The signature is valid.")
+      //       return true
+      //    } else {
+      //       print("The signature is invalid.")
+      //       return false
+      //    }
+      // } catch {
+      //    print("An error occurred while creating the public key or verifying the signature: \(error)")
+      //    throw error
+      // }
+
+       // Convert the raw public key data into a usable public key
+       let publicKey = try Curve25519.Signing.PublicKey(rawRepresentation: publicKeyData)
+       
+       // Verify the signature
+       return publicKey.isValidSignature(signature, for: data)
    }
 }
 /**
@@ -43,17 +50,15 @@ extension P256.Signing.PublicKey {
     *   - signature: The signature to verify.
     *   - data: The data that was supposedly signed.
     * - Returns: A Boolean value indicating whether the signature is valid.
-    * - Fixme: ⚠️️ This is not in use yet, figure out if we need it
+    * - Fixme: ⚠️️ This is not in use yet, figure out if we need it, and make it throw
     */
    public func isValidSignature(_ signature: Data, for data: Data) -> Bool {
-      do {
-         // Convert the signature from Data to a CryptoKit signature type
-         let cryptoSignature = try P256.Signing.ECDSASignature(derRepresentation: signature)
-         // Use CryptoKit's built-in verification method
-         return self.isValidSignature(cryptoSignature, for: data)
-      } catch {
-         print("Failed to verify signature: \(error)")
+      // Convert the signature from Data to a CryptoKit signature type
+      guard let cryptoSignature = try? P256.Signing.ECDSASignature(derRepresentation: signature) else {
+         print("Failed to verify signature")
          return false
       }
+      // Use CryptoKit's built-in verification method
+      return self.isValidSignature(cryptoSignature, for: data)
    }
 }

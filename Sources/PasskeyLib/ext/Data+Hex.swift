@@ -10,17 +10,18 @@ extension Data {
     * - Parameter hexString: A hexadecimal string to decode.
     */
    public init?(hexString: String) {
-      let len = hexString.count / 2
-      var data = Data(capacity: len)
-      for i in 0..<len {
-         let j = hexString.index(hexString.startIndex, offsetBy: i * 2)
-         let k = hexString.index(j, offsetBy: 2)
-         let bytes = hexString[j..<k]
-         if var num = UInt8(bytes, radix: 16) {
-            data.append(&num, count: 1)
-         } else {
-            return nil
-         }
+      // Ensure the hex string has an even number of characters
+      guard hexString.count % 2 == 0 else { return nil }
+      var data = Data(capacity: hexString.count / 2)
+      var index = hexString.startIndex
+      // Iterate over every pair of characters in the hex string
+      for _ in 0..<(hexString.count / 2) {
+         let nextIndex = hexString.index(index, offsetBy: 2)
+         let byteString = hexString[index..<nextIndex]
+         // Convert the pair of characters into a byte
+         guard let num = UInt8(byteString, radix: 16) else { return nil }
+         data.append(num)
+         index = nextIndex
       }
       self = data
    }
@@ -38,22 +39,24 @@ extension Data {
     * - Throws: An error if the string contains non-hexadecimal characters or has an odd length.
     */
    public static func decodeHex(_ hex: String) throws -> Data {
+      // Check if the hex string has an even length
       guard hex.count % 2 == 0 else {
          throw DecodingError.oddLengthString
       }
       
-      var data = Data()
-      var bytePair = ""
+      var data = Data(capacity: hex.count / 2)
       
-      for char in hex {
-         bytePair += String(char)
-         if bytePair.count == 2 {
-            guard let byte = UInt8(bytePair, radix: 16) else {
-               throw DecodingError.invalidHexCharacter
-            }
-            data.append(byte)
-            bytePair = ""
+      // Iterate over the hex string in steps of 2 characters
+      for i in stride(from: 0, to: hex.count, by: 2) {
+         let startIndex = hex.index(hex.startIndex, offsetBy: i)
+         let endIndex = hex.index(startIndex, offsetBy: 2)
+         let byteString = hex[startIndex..<endIndex]
+         
+         // Convert the 2-character string into a byte
+         guard let byte = UInt8(byteString, radix: 16) else {
+            throw DecodingError.invalidHexCharacter
          }
+         data.append(byte)
       }
       
       return data

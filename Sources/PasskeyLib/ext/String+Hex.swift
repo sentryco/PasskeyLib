@@ -1,14 +1,19 @@
 import Foundation
 /**
- * String ext
+ * String extension to convert hex string to bytes and Data.
  */
 extension String {
    /**
-    * - Description: Converts a string to a sequence of hexadecimal bytes.
-    * - Returns: A sequence of hexadecimal bytes.
+    * - Description: Converts a string to an array of hexadecimal bytes.
+    * - Returns: An array of UInt8 bytes represented by the hex string.
     */
-   public var hex: some Sequence<UInt8> {
-      self[...].hex
+   public var hex: [UInt8] {
+      stride(from: 0, to: self.count, by: 2).compactMap { index in
+          let start = self.index(self.startIndex, offsetBy: index)
+          let end = self.index(start, offsetBy: 2, limitedBy: self.endIndex) ?? self.endIndex
+          let byteString = self[start..<end]
+          return UInt8(byteString, radix: 16)
+      }
    }
    /**
     * - Description: Converts a string to a Data object.
@@ -16,24 +21,5 @@ extension String {
     */
    public var hexData: Data {
       return Data(hex)
-   }
-}
-/**
- * Substring ext
- */
-extension Substring {
-   /**
-    * - Description: Converts a substring to a sequence of hexadecimal bytes.
-    * - Returns: A sequence of hexadecimal bytes.
-    */
-   public var hex: some Sequence<UInt8> {
-      sequence(
-         state: self,
-         next: { remainder in
-            guard remainder.count > 2 else { return nil }
-            let nextTwo = remainder.prefix(2)
-            remainder.removeFirst(2)
-            return UInt8(nextTwo, radix: 16)
-         })
    }
 }

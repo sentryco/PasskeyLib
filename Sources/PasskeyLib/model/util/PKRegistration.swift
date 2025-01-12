@@ -8,27 +8,30 @@ import Foundation
  */
 public struct PKRegistration {
 
-   /// An instance of `ASPasskeyCredentialIdentity`. This identity is used to uniquely
-   /// identify the passkey credential. It typically includes information such as the
-   /// relying party (RP) identifier and the user handle. For passkey registrations,
-   /// the `credentialID` is expected to be empty.
-   let identity: ASPasskeyCredentialIdentity
+    /**
+     * An `ASPasskeyCredentialIdentity` instance that uniquely identifies the passkey credential.
+     * It usually contains information like the relying party (RP) identifier and the user handle.
+     * For passkey registrations, the `credentialID` is expected to be empty.
+     */
+    let identity: ASPasskeyCredentialIdentity
 
-   /// Specifies the user verification preference for the registration
-   /// process. This preference indicates whether and how the user
-   /// verification should be conducted (e.g., preferred, required, or
-   /// discouraged).
-   let userVerificationPreference: ASAuthorizationPublicKeyCredentialUserVerificationPreference
+    /**
+     * The user verification preference for the registration process, indicating whether and how
+     * user verification should be conducted (e.g., preferred, required, or discouraged).
+     */
+    let userVerificationPreference: ASAuthorizationPublicKeyCredentialUserVerificationPreference
 
-   /// A hash of the client data, represented as a `Data` object. The client data
-   /// typically includes contextual information about the WebAuthn operation, such
-   /// as the origin of the operation and the challenge from the server.
-   let clientDataHash: Data
+    /**
+     * A hash of the client data (`Data`). The client data typically contains contextual
+     * information about the WebAuthn operation, such as the origin and the server's challenge.
+     */
+    let clientDataHash: Data
 
-   /// An array of `ASCOSEAlgorithmIdentifier` that specifies the cryptographic
-   /// algorithms supported by the client for the registration process. This
-   /// allows the server to choose a compatible algorithm for key generation
-   /// during the credential creation.
-   let supportedAlgorithms: [ASCOSEAlgorithmIdentifier]
+    /**
+     * An array of cryptographic algorithms (`[ASCOSEAlgorithmIdentifier]`) supported by the client
+     * during registration. This allows the server to choose a compatible algorithm for key generation
+     * when creating the credential.
+     */
+    let supportedAlgorithms: [ASCOSEAlgorithmIdentifier]
 
 }
