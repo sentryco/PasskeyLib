@@ -3,7 +3,7 @@ import CryptoKit
 import SwiftCBOR
 @testable import PasskeyLib
 
-class PKDataAttestationDataTests: XCTestCase {
+extension PasskeyLibTests {
    /**
     * Valid Inputs: Ensures that with correct inputs, the method returns a valid attestation object.
     */

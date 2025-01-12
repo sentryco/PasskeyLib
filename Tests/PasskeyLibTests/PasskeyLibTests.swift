@@ -8,11 +8,11 @@ import AuthenticationServices
  * - Fixme: ⚠️️ Get a hold of synthetic passkey data to test with
  * - Fixme: ⚠️️ organize these test better
  */
-class YourTestClassTests: XCTestCase {}
+class PasskeyLibTests: XCTestCase {}
 /**
  * Tests
  */
-extension YourTestClassTests {
+extension PasskeyLibTests {
    /**
     * Test initiating a passkey
     */
@@ -86,7 +86,7 @@ extension YourTestClassTests {
    
 }
 // Additional tests
-extension YourTestClassTests {
+extension PasskeyLibTests {
    /**
     * Verifies that the validator correctly validates a signature when provided with valid data.
     */
@@ -333,7 +333,7 @@ extension YourTestClassTests {
 }
 
 // more tests
-extension YourTestClassTests {
+extension PasskeyLibTests {
    /**
     * Test PKData Equality with Different Data
     *

@@ -6,7 +6,7 @@ import AuthenticationServices
 
 // json tests
 
-extension YourTestClassTests {
+extension PasskeyLibTests {
     /**
      * Verifies that a valid `PKData` instance can be serialized to a non-empty JSON string.
      *
