@@ -196,3 +196,4 @@ override func prepareInterface(forExtensionConfiguration configuration: ASCreden
 - An interesting aspect with passkey is that we can use a secondary device to authenticate on. challnage response. So we could build in a sort of require secondary device challange feature. Exclusive.
 - Investigate if we can broadcast receipt from another device. If that works, we could build in passkey support for chrome. by scanning the qr in chrome. and then broadcasting from iPhone etc.
 - Write unit tests based on the codebase. Use AI to suggest areas that are testable and write test code etc ✅
+- Add problem / solution to readme
