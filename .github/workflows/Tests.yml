@@ -8,15 +8,33 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 * * * *'  # runs every hour at minute 0
 
 jobs:
   build:
-
     runs-on: macos-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
+      - uses: actions/checkout@v4
+      - name: Determine if tests should run at random time
+        if: github.event_name == 'schedule'
+        shell: bash
+        run: |
+          # Generate a random hour for today based on the date
+          DATE_SEED=$(date '+%Y-%m-%d')
+          RANDOM_HOUR=$((0x$(echo -n $DATE_SEED | md5sum | cut -c1-2) % 24))
+          CURRENT_HOUR=$(date '+%H' | sed 's/^0*//')
+
+          echo "Random hour for today is $RANDOM_HOUR"
+          echo "Current hour is $CURRENT_HOUR"
+
+          if [ "$CURRENT_HOUR" -ne "$RANDOM_HOUR" ]; then
+            echo "Not the random hour. Exiting."
+            exit 0
+          fi
+
+          echo "It's the random hour. Proceeding with tests."
+      - name: Build
+        run: swift build -v
+      - name: Run tests
+        run: swift test -v
