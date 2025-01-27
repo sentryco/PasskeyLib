@@ -22,7 +22,7 @@ jobs:
         run: |
           # Generate a random hour for today based on the date
           DATE_SEED=$(date '+%Y-%m-%d')
-          RANDOM_HOUR=$((0x$(echo -n $DATE_SEED | md5sum | cut -c1-2) % 24))
+          RANDOM_HOUR=$((0x$(echo -n $DATE_SEED | md5 | cut -c1-2) % 24))
           CURRENT_HOUR=$(date '+%H' | sed 's/^0*//')
 
           echo "Random hour for today is $RANDOM_HOUR"
